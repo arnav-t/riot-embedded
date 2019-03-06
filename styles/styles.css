@@ -1,3 +1,7 @@
 body {
-	background-color: aquamarine;
+	display: flex;
+}
+
+#rooms {
+	float: left;
 }
