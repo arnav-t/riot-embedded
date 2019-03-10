@@ -3,6 +3,7 @@ export function roomsList(rooms) {
 	rooms.forEach(roomName => {
 		let listObj = document.createElement('li');
 		listObj.classList.add('list-group-item');
+		listObj.classList.add('bg-dark');
 		listObj.innerHTML = roomName;
 		roomsList.appendChild(listObj);
 	});
@@ -14,8 +15,9 @@ export function appendRoom(roomName, roomId, currentRoomId) {
 		var listObj = document.createElement('li');
 		listObj.id = roomId;
 		listObj.classList.add('list-group-item');
+		listObj.classList.add('bg-dark');
 		if(roomId === currentRoomId) {
-			listObj.classList.add('active');
+			listObj.classList.replace('bg-dark', 'active');
 		}
 		listObj.innerHTML = roomName;
 		roomsList.appendChild(listObj);

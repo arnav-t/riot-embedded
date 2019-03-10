@@ -1,5 +1,6 @@
 body {
 	display: flex;
+	background: #333333;
 }
 
 #rooms {
@@ -9,7 +10,20 @@ body {
 	float: left;
 }
 
+#room-header {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	box-shadow: 0 1 1;
+	z-index: 9999;
+}
+
 #room-body {
+	height: 100%;
 	flex-grow: 1;
 	float: right;
+}
+
+#msg-list {
+	overflow-y: scroll;
 }

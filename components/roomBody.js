@@ -4,6 +4,7 @@ export function loadMessages(timeline) {
 		let listObj = document.createElement('li');
 		listObj.id = event.event_id;
 		listObj.classList.add('list-group-item');
+		listObj.classList.add('bg-dark');
 		
 		let usernameObj = document.createElement('h6');
 		usernameObj.innerHTML = event.sender['name'] + ' ';
