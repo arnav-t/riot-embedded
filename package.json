@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.3.1",
-    "matrix-js-sdk": "^1.0.1"
+    "matrix-js-sdk": "^1.0.1",
+    "popper.js": "^1.14.7"
   }
 }
