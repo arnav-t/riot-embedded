@@ -7,3 +7,10 @@ npm install
 npm run build
 npm start
 ```
+Create `creds.js` in the root directory of the repository with the following format.
+```
+const myUserId = "<USER ID>";
+const myAccessToken = "<ACCESS TOKEN>";
+
+export {myUserId, myAccessToken};
+```

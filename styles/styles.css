@@ -3,5 +3,13 @@ body {
 }
 
 #rooms {
+	min-width: 400px;
+	width: 25%;
+	height: 100%;
 	float: left;
+}
+
+#room-body {
+	flex-grow: 1;
+	float: right;
 }
