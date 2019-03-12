@@ -10,7 +10,7 @@ require('./styles/styles.css');
 import {myUserId, myAccessToken} from './creds';
 
 // Initialize matrix-js-sdk
-const currentRoomId = '!WZbLERcNJxrvkxPfyV:matrix.org';
+const currentRoomId = '!ahcBstQiPShMcpZxLK:jki.re';
 var sdk = require('matrix-js-sdk');
 var client = sdk.createClient({
 	baseUrl: "https://matrix.org",
