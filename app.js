@@ -41,6 +41,16 @@ client.on("Room.timeline", function(event, room, toStartOfTimeline) {
 	appendRoom(roomName, roomId, currentRoomId);
 });
 
+// Function for handling sending messages
+var msgInput = document.getElementById('send-input');
+msgInput.onkeyup = function sendMessage() {
+	var key = window.event.keyCode;
+
+	if (key == 13) {
+		console.log('Message shall be sent.');
+	}
+}
+
 /*
 // Disabled as joined rooms are shown in lieu of public rooms
 // Populate with the list of public rooms
