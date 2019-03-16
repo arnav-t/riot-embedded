@@ -66,3 +66,13 @@ body {
 	border-radius: 50%;
 	object-fit: contain;
 }
+
+.msg-body {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+}
+
+.msg-data {
+	height: fit-content;
+}
