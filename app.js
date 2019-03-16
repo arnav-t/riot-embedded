@@ -29,7 +29,15 @@ client.once('sync', function(state, prevState, res) {
 	client.joinRoom(currentRoomId).done(() => {
 		console.log("Joined default room!");
 		var room = client.getRoom(currentRoomId);
+		
 		loadHeader(room.name, room.myUserId);
+		// Load room avatar
+		var imgSize = document.getElementById('room-header').clientHeight - 20;
+		var roomAvatarImg = document.getElementById('room-avatar');
+		roomAvatarImg.height = imgSize;
+		roomAvatarImg.width = imgSize;
+		roomAvatarImg.src = room.getAvatarUrl(client.getHomeserverUrl(), imgSize, imgSize, 'scale');
+
 		loadMessages(room.timeline);
 	});
 });

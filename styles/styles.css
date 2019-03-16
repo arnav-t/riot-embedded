@@ -26,6 +26,8 @@ body {
 	width: 100%;
 	box-shadow: 0 10 1;
 	z-index: 9999;
+	display: flex;
+	flex-direction: row;
 }
 
 #room-body {
@@ -57,4 +59,10 @@ body {
 #send-input {
 	height: 100%;
 	width: 100%;
+}
+
+.rounded-img {
+	
+	border-radius: 50%;
+	object-fit: contain;
 }
