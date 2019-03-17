@@ -44,7 +44,7 @@ export function loadHeader(room, client) {
 	var myUserId = room.myUserId;
 	var title = document.getElementById('room-title');
 	var subtitle = document.getElementById('room-subtitle');
-	var imgSize = document.getElementById('room-header').clientHeight - 20;
+	var imgSize = 64//document.getElementById('room-header').clientHeight - 20;
 	var roomAvatarImg = document.getElementById('room-avatar');
 	
 	roomAvatarImg.height = imgSize;

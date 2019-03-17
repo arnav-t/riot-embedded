@@ -36,6 +36,7 @@ body {
 	top: 0;
 	left: 25%;
 	height: 90%;
+	width: 75%;
 	max-height: 90%;
 	flex-grow: 1;
 	float: right;
