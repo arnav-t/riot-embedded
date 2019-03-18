@@ -14,7 +14,11 @@ export function loadMessages(room, client) {
 		imgObj.classList.add('mr-3');
 		let sender = room.getMember(event.event['sender']);
 		let imgSize = 32;
-		imgObj.src = sender.getAvatarUrl(client.getHomeserverUrl(), imgSize, imgSize, 'scale');
+		var profilePicUrl = sender.getAvatarUrl(client.getHomeserverUrl(), imgSize, imgSize, 'scale', false);
+		if (profilePicUrl === null) {
+			profilePicUrl = 'https://via.placeholder.com/' + imgSize.toString();
+		}
+		imgObj.src = profilePicUrl;
 		imgObj.height = imgSize;
 		imgObj.width = imgSize;
 
@@ -44,12 +48,16 @@ export function loadHeader(room, client) {
 	var myUserId = room.myUserId;
 	var title = document.getElementById('room-title');
 	var subtitle = document.getElementById('room-subtitle');
-	var imgSize = 64//document.getElementById('room-header').clientHeight - 20;
+	var imgSize = 64;
 	var roomAvatarImg = document.getElementById('room-avatar');
 	
 	roomAvatarImg.height = imgSize;
 	roomAvatarImg.width = imgSize;
-	roomAvatarImg.src = room.getAvatarUrl(client.getHomeserverUrl(), imgSize, imgSize, 'scale');
+	var roomPicUrl = room.getAvatarUrl(client.getHomeserverUrl(), imgSize, imgSize, 'scale', false);
+	if (roomPicUrl === null) {
+		roomPicUrl = 'https://via.placeholder.com/' + imgSize.toString();
+	}
+	roomAvatarImg.src = roomPicUrl;
 	
 	title.innerHTML = name;
 	subtitle.innerHTML = myUserId;
