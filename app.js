@@ -1,3 +1,6 @@
+// Import configuration
+import {config} from './config';
+
 // Components
 import {roomsList, appendRoom, selectRoom} from './components/roomsList';
 
@@ -5,16 +8,12 @@ import {roomsList, appendRoom, selectRoom} from './components/roomsList';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 require('./styles/styles.css');
 
-// Import credentials
-import {myUserId, myAccessToken} from './creds';
-
 // Initialize matrix-js-sdk
-const defaultRoomId = '!ahcBstQiPShMcpZxLK:jki.re';
 var sdk = require('matrix-js-sdk');
 var client = sdk.createClient({
-	baseUrl: "https://matrix.org",
-	accessToken: myAccessToken,
-	userId: myUserId
+	baseUrl: config.baseUrl,
+	accessToken: config.accessToken,
+	userId: config.userId
 });
 
 // Start client
@@ -25,8 +24,8 @@ client.once('sync', function(state, prevState, res) {
 	console.log(state); // state will be 'PREPARED' when the client is ready to use
 	
 	// Populate with messages from default room
-	client.joinRoom(defaultRoomId).done(() => {
-		selectRoom(defaultRoomId, client);
+	client.joinRoom(config.roomId).done(() => {
+		selectRoom(config.roomId, client);
 	});
 });
 
@@ -34,7 +33,7 @@ client.once('sync', function(state, prevState, res) {
 client.on("Room.timeline", function(event, room, toStartOfTimeline) {
 	let roomName = room.name; 
 	let roomId = room.roomId;
-	appendRoom(roomName, roomId, defaultRoomId, client);
+	appendRoom(roomName, roomId, config.roomId, client);
 });
 
 // Function for handling sending messages

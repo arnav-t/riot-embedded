@@ -7,10 +7,12 @@ npm install
 npm run build
 npm start
 ```
-Create `creds.js` in the root directory of the repository with the following format.
-```
-const myUserId = "<USER ID>";
-const myAccessToken = "<ACCESS TOKEN>";
-
-export {myUserId, myAccessToken};
+Create `config.js` in the root directory of the repository with the following format.
+```js
+export let config = {
+	baseUrl: "<BASE URL>,
+	roomId: "<DEFAULT ROOM ID>",
+	userId: "<DEFAULT USER ID>",
+	accessToken: "<DEFAULT ACCESS TOKEN"
+}
 ```
