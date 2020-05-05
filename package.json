@@ -23,6 +23,9 @@
   },
   "homepage": "https://github.com/arnav-t/riot-embedded#readme",
   "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "babel-loader": "^8.1.0",
     "css-loader": "^2.1.1",
     "style-loader": "^0.23.1",
     "webpack": "^4.43.0",
@@ -33,5 +36,10 @@
     "bootstrap": "^4.4.1",
     "matrix-js-sdk": "^1.2.0",
     "popper.js": "^1.16.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   }
 }
