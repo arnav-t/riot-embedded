@@ -8,6 +8,11 @@ import {roomsList, appendRoom, selectRoom} from './components/roomsList';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 require('./styles/styles.css');
 
+import Client from './client';
+let client = new Client(config);
+client.init();
+
+/*
 // Initialize matrix-js-sdk
 var sdk = require('matrix-js-sdk');
 var client = sdk.createClient({
@@ -15,6 +20,7 @@ var client = sdk.createClient({
 	accessToken: config.accessToken,
 	userId: config.userId
 });
+//var client = sdk.createClient(config.baseUrl);
 
 // Start client
 client.startClient();
@@ -25,7 +31,7 @@ client.once('sync', function(state, prevState, res) {
 	
 	// Populate with messages from default room
 	client.joinRoom(config.roomId).done(() => {
-		selectRoom(config.roomId, client);
+		//selectRoom(config.roomId, client);
 	});
 });
 
@@ -59,4 +65,3 @@ client.publicRooms((err, data) => {
 	roomsList(rooms);
 });
 */
-
