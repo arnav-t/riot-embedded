@@ -1,8 +1,10 @@
+import React, {Component} from 'react';
 import {roomsList, appendRoom, selectRoom} from './components/roomsList';
 
-export default class Client {
+export default class Client extends Component{
     constructor(config) {
-        this.config = config;
+        super();
+        this.state = config;
         this.sdk = require('matrix-js-sdk');
         this.client = this.sdk.createClient(config);
     }
@@ -18,11 +20,11 @@ export default class Client {
     }
     loadRooms() {
         for (let room of this.client.getRooms()) {
-            if (room !== undefined) appendRoom(room.name, room.roomId, this.config.roomId, this.client)
+            appendRoom(room.name, room.roomId, this.state.roomId, this.client)
         }
     }
     async populateRoom() {
-        let room = await this.client.joinRoom(this.config.roomId);
-        selectRoom(this.config.roomId, this.client);
+        let room = await this.client.joinRoom(this.state.roomId);
+        selectRoom(this.state.roomId, this.client);
     }
 }
