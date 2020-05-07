@@ -1,6 +1,21 @@
-import React, {Component} from 'react';
-import EventTimeline from './eventTimeline.jsx';
+/**
+ * @fileoverview    React component for the client
+ * 
+ * @requires        NPM:react
+ * @requires        ./event-timeline.jsx
+ */
 
+import React, {Component} from 'react';
+import EventTimeline from './event-timeline.jsx';
+
+/** 
+ * React component for the client 
+ * 
+ * @param   {string} roomId - The ID of default room
+ * @param   {string} userId - The ID of default user
+ * @param   {string} accessToken - Access token of default user
+ * @param   {string} baseUrl - Base URL of homeserver
+ */
 export default class Client extends Component{
     constructor(props) {
         super(props);
@@ -16,12 +31,14 @@ export default class Client extends Component{
             accessToken: props.accessToken,
             userId: props.userId
         });
-        this.init();
 
         this.init = this.init.bind(this);
         this.loadRooms = this.loadRooms.bind(this);
         this.populateRoom = this.populateRoom.bind(this);
+        this.init();
     }
+
+    /** Connect client to homeserver */
     init() {
         this.client.startClient();
         this.client.once('sync', (state, prevState, res) => {
@@ -32,11 +49,14 @@ export default class Client extends Component{
             }
         });
     }
-    loadRooms() {
+    
+    /** Load list of rooms */
+    async loadRooms() {
         /* for (let room of this.client.getRooms()) {
             appendRoom(room.name, room.roomId, this.state.roomId, this.client)
         } */
     }
+    /** Load timeline for the current room */
     async populateRoom() {
         let room = await this.client.joinRoom(this.state.roomId);
         let timeline = []
@@ -54,6 +74,7 @@ export default class Client extends Component{
             timeline: timeline
         });
     }
+
     render() {
         return (
             <div>

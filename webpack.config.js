@@ -27,6 +27,6 @@ module.exports = {
 		contentBase: path.resolve(__dirname, '.'),
 		port: 9000,
 		hot: true,
-		inline: true
+		writeToDisk: true
 	},
 };

@@ -1,6 +1,20 @@
+/**
+ * @fileoverview    React component for event timeline of a room
+ * 
+ * @requires        NPM:react
+ * @requires        ./event.jsx
+ */
+
 import React, {Component} from 'react';
 import Event from './event.jsx';
 
+/** 
+ * React component for the event timeline of a room 
+ * 
+ * @param   {Array} timeline - An array of objects of each object containing
+ *                             event_id, username, userId, avatarUrl, msgBody 
+ *                             of the event
+ */
 export default class EventTimeline extends Component {
     /*constructor(props) {
         super(props);
@@ -25,7 +39,6 @@ export default class EventTimeline extends Component {
         }
     }*/
     render() {
-        console.log(this.props);
         let events = [];
         for (let e of this.props.timeline) {
             events.push(
