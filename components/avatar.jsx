@@ -14,8 +14,10 @@ import React, {Component} from 'react';
  */
 export default class Avatar extends Component {
     render() {
+        console.log(this.props.imgUrl);
+        let imgUrl = this.props.imgUrl ?  this.props.imgUrl : 'https://via.placeholder.com/32';
         return (
-            <img src={this.props.imgUrl} height={this.props.size} width={this.props.size} className='rounded-img mr-3' />
+            <img src={imgUrl} height={this.props.size} width={this.props.size} className='rounded-img mr-3' />
         );
     }
 }

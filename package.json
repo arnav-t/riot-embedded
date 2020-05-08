@@ -34,9 +34,7 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.9.4",
-    "bootstrap": "^4.4.1",
     "matrix-js-sdk": "^1.2.0",
-    "popper.js": "^1.16.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

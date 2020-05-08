@@ -21,10 +21,10 @@ export default class Event extends Component {
     render() {
         return (
             <li>
-                <div className='list-group-item bg-dark msg-body'>
+                <div className='list-panel-item darker-bg msg-body'>
                     <Avatar imgUrl={this.props.avatarUrl} size={32} />
                     <div className='msg-data'>
-                        <h6>{this.props.username} <i className='text-muted'>{this.props.userId}</i></h6>
+                        <h4>{this.props.username} <i className='txt-muted'>{this.props.userId}</i></h4>
                         <p>
                             {this.props.msgBody}
                         </p>
