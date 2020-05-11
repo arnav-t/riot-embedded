@@ -2,11 +2,13 @@
  * @fileoverview    React component for a timeline event
  * 
  * @requires        NPM:react
+ * @requires        NPM:prop-types
  * @requires        ./avatar.jsx
  */
 
 
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import Avatar from './avatar.jsx';
 
 /** 
@@ -17,7 +19,7 @@ import Avatar from './avatar.jsx';
  * @param   {string} username - The username of sender
  * @param   {string} msgBody - The body of message
  */
-export default class Event extends Component {
+class Event extends Component {
     render() {
         return (
             <li>
@@ -34,3 +36,12 @@ export default class Event extends Component {
         );
     }
 }
+
+Event.propTypes = {
+    avatarUrl: PropTypes.string, // The avatar URL of the event sender
+    userId: PropTypes.string, // The ID of sender
+    username: PropTypes.string, // The username of sender
+    msgBody: PropTypes.string, // The body of message
+};
+
+export default Event;
