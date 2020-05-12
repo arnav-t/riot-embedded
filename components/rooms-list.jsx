@@ -1,12 +1,3 @@
-/**
- * @fileoverview    React component for list of rooms
- * 
- * @requires        NPM:react
- * @requires        NPM:prop-types
- * @requires        ./room-tile.jsx
- */
-
-
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import RoomTile from './room-tile.jsx';
@@ -18,7 +9,13 @@ import RoomTile from './room-tile.jsx';
  * @param   {string} currentRoomId - The currently selected roomId
  * @param   {func} onClick - Callback for onclick events
  */
-class RoomsList extends PureComponent {
+export default class RoomsList extends PureComponent {
+    static propTypes = {
+        list: PropTypes.arrayOf(PropTypes.object).isRequired, // List of rooms
+        currentRoomId: PropTypes.string.isRequired, // Currently selected room ID
+        onClick: PropTypes.func // Callback for onclick events
+    };
+
     render() {
         // Construct a list of RoomTile components from list of rooms
         let rooms = [];
@@ -39,11 +36,3 @@ class RoomsList extends PureComponent {
         );
     }
 }
-
-RoomsList.propTypes = {
-    list: PropTypes.arrayOf(PropTypes.object).isRequired, // List of rooms
-    currentRoomId: PropTypes.string.isRequired, // Currently selected room ID
-    onClick: PropTypes.func // Callback for onclick events
-};
-
-export default RoomsList;

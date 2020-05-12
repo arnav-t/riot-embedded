@@ -1,13 +1,3 @@
-/**
- * @fileoverview    React component for the client
- * 
- * @requires        NPM:react
- * @requires        NPM:prop-types
- * @requires        ./event.jsx
- * @requires        ./rooms-list.jsx
- * @requires        ./room-header.jsx
- */
-
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import RoomsList from './rooms-list';
@@ -22,7 +12,14 @@ import RoomHeader from './room-header';
  * @param   {string} accessToken - Access token of default user
  * @param   {string} baseUrl - Base URL of homeserver
  */
-class Client extends Component{
+export default class Client extends Component{
+    static propTypes = {
+        roomId: PropTypes.string.isRequired, // The ID of default room
+        userId: PropTypes.string.isRequired, // The ID of default user
+        accessToken: PropTypes.string.isRequired, // The access token of default user
+        baseUrl: PropTypes.string.isRequired // The base URL of homeserver
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -84,12 +81,3 @@ class Client extends Component{
         );
     }
 }
-
-Client.propTypes = {
-    roomId: PropTypes.string.isRequired, // The ID of default room
-    userId: PropTypes.string.isRequired, // The ID of default user
-    accessToken: PropTypes.string.isRequired, // The access token of default user
-    baseUrl: PropTypes.string.isRequired // The base URL of homeserver
-};
-
-export default Client;

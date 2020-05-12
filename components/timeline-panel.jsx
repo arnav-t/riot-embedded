@@ -1,11 +1,3 @@
-/**
- * @fileoverview    React component for room timeline
- * 
- * @requires        NPM:react
- * @requires        NPM:prop-types
- * @requires        ./event-tile.jsx
- */
-
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import EventTile from './event-tile.jsx';
@@ -16,7 +8,12 @@ import EventTile from './event-tile.jsx';
  * @param   {string} homeserver - The homeserver URL
  * @param   {object} room - The room object
  */
-class TimelinePanel extends PureComponent {
+export default class TimelinePanel extends PureComponent {
+    static propTypes = {
+        homeserver: PropTypes.string.isRequired, // Homeserver URL
+        room: PropTypes.object // Room object
+    };
+
     render() {
         // Construct timeline from room
         let timeline = [];
@@ -39,10 +36,3 @@ class TimelinePanel extends PureComponent {
         );
     }
 }
-
-TimelinePanel.propTypes = {
-    homeserver: PropTypes.string.isRequired, // Homeserver URL
-    room: PropTypes.object // Room object
-};
-
-export default TimelinePanel;

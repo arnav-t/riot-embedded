@@ -1,11 +1,3 @@
-/**
- * @fileoverview    React component for room header
- * 
- * @requires        NPM:react
- * @requires        NPM:prop-types
- * @requires        ./avatar.jsx
- */
-
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import Avatar from './avatar.jsx';
@@ -16,7 +8,12 @@ import Avatar from './avatar.jsx';
  * @param   {string} homeserver - Homeserver URL
  * @param   {object} room - Room object for the corresponding room
  */
-class RoomHeader extends PureComponent {
+export default class RoomHeader extends PureComponent {
+    static propTypes = {
+        homeserver: PropTypes.string.isRequired, // Homeserver URL 
+        room: PropTypes.object // Room object for corresponding room    
+    };
+
     render() {
         // Get avatar URL of room
         let avatarUrl = this.props.room ? 
@@ -31,10 +28,3 @@ class RoomHeader extends PureComponent {
         );
     }
 }
-
-RoomHeader.propTypes = {
-    homeserver: PropTypes.string.isRequired, // Homeserver URL 
-    room: PropTypes.object // Room object for corresponding room    
-};
-
-export default RoomHeader;

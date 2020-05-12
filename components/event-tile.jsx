@@ -1,11 +1,3 @@
-/**
- * @fileoverview    React component for event tile
- * 
- * @requires        NPM:react
- * @requires        NPM:prop-types
- * @requires        ./avatar.jsx
- */
-
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import Avatar from './avatar.jsx';
@@ -16,7 +8,12 @@ import Avatar from './avatar.jsx';
  * @param   {string} homeserver - The homeserver URL
  * @param   {object} mxEvent - The event object
  */
-class EventTile extends PureComponent {
+export default class EventTile extends PureComponent {
+    static propTypes = {
+        homeserver: PropTypes.string.isRequired, // Homeserver URL
+        mxEvent: PropTypes.object.isRequired // Event object
+    };
+
     render() {
         // Extract details from event
         let sender = this.props.mxEvent.sender;
@@ -39,10 +36,3 @@ class EventTile extends PureComponent {
         );
     }
 }
-
-EventTile.propTypes = {
-    homeserver: PropTypes.string.isRequired, // Homeserver URL
-    mxEvent: PropTypes.object.isRequired // Event object
-};
-
-export default EventTile;
