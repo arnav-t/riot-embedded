@@ -7,11 +7,13 @@ import EventTile from './event-tile.jsx';
  * 
  * @param   {string} homeserver - The homeserver URL
  * @param   {object} room - The room object
+ * @param   {Array<Object>} children - Children of room timeline
  */
 export default class TimelinePanel extends PureComponent {
     static propTypes = {
         homeserver: PropTypes.string.isRequired, // Homeserver URL
-        room: PropTypes.object // Room object
+        room: PropTypes.object, // Room object
+        children: PropTypes.arrayOf(PropTypes.object) // Children of timeline
     };
 
     render() {
@@ -28,10 +30,13 @@ export default class TimelinePanel extends PureComponent {
         }
         
         return (
-            <div className='darker-bg body-panel'>
-                <ul className='list-panel'>
-                    {timeline}
-                </ul>
+            <div className='main-body'>
+                <div className='darker-bg body-panel scrollable'>
+                    <ul className='list-panel'>
+                        {timeline}
+                    </ul>
+                </div>
+                {this.props.children}
             </div>
         );
     }

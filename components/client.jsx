@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import RoomsList from './rooms-list';
 import TimelinePanel from './timeline-panel.jsx';
 import RoomHeader from './room-header';
+import MessageComposer from './message-composer';
 
 /** 
  * React component for the client 
@@ -75,7 +76,9 @@ export default class Client extends Component{
                         onClick={this.onSelectRoom} />
 
                     <TimelinePanel homeserver={homeserver}
-                        room={this.state.room} />
+                        room={this.state.room}> 
+                        <MessageComposer />
+                    </TimelinePanel>
                 </div>
             </div>
         );
