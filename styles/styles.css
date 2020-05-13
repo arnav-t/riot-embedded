@@ -51,12 +51,16 @@ body {
     width: 100%;
     display: flex;
     flex-flow: column;
+    align-items: stretch;
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
 
 .body-panel {
     height: 100%;
     padding-left: 15px;
     flex-grow: 1;
+    display: flex;
 }
 
 .list-panel {
@@ -72,12 +76,25 @@ body {
     padding: 5px;
 }
 
-.msg-composer {
-    min-height: 20px;
-    max-height: 120px;
-    padding: 15px;
-    z-index: 50;
+.composer-panel {
+    display: flex;
+    align-items: center;
     box-shadow: 0 0 5px #444;
+    z-index: 50;
+}
+
+.msg-composer {
+    min-height: 45px;
+    width: 100%;
+    padding: 15px; 
+    resize: none;
+    border: none;
+    outline: none;
+}
+
+.msg-composer:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 /* ||| Avatar */
@@ -110,6 +127,28 @@ body {
 }
 
 /* || Styling and themes */
+.send-button {
+    height: 100%;
+    width: 75px;
+    padding: 0px;
+    background-color: rgb(221, 15, 135);
+    color: white;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    box-shadow: none;
+
+    transition: width 0.2s, box-shadow 0.2s;
+}
+
+.send-button:disabled {
+    width: 0px;
+}
+
+.send-button:hover {
+    box-shadow: 0 0 20px #666;
+}
+
 /* ||| Background colors */
 .dark-bg {
     color: white;

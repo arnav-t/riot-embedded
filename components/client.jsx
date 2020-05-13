@@ -35,8 +35,19 @@ export default class Client extends Component{
 
         this.init = this.init.bind(this);
         this.onSelectRoom = this.onSelectRoom.bind(this);
+        this._onRoomTimeline = this._onRoomTimeline.bind(this);
 
         this.init();
+    }
+
+    /** Listener for timeline events */
+    _onRoomTimeline(event, room) {
+        if (room === this.state.room) {
+            // If event is from current room, update
+            this.setState({
+                room: room
+            });
+        }
     }
 
     /** Connect client to homeserver */
@@ -48,6 +59,9 @@ export default class Client extends Component{
                 this.setState({
                     room: this.client.getRoom(this.props.roomId)
                 });
+
+                // Add listeners
+                this.client.on('Room.timeline', this._onRoomTimeline);
             }
         });
     }
@@ -77,7 +91,9 @@ export default class Client extends Component{
 
                     <TimelinePanel homeserver={homeserver}
                         room={this.state.room}> 
-                        <MessageComposer />
+                        <MessageComposer client={this.client} 
+                            roomId={currentRoomId} />
+                        
                     </TimelinePanel>
                 </div>
             </div>

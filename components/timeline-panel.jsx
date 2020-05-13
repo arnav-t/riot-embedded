@@ -7,13 +7,13 @@ import EventTile from './event-tile.jsx';
  * 
  * @param   {string} homeserver - The homeserver URL
  * @param   {object} room - The room object
- * @param   {Array<Object>} children - Children of room timeline
+ * @param   {object} children - Children of room timeline
  */
 export default class TimelinePanel extends PureComponent {
     static propTypes = {
         homeserver: PropTypes.string.isRequired, // Homeserver URL
         room: PropTypes.object, // Room object
-        children: PropTypes.arrayOf(PropTypes.object) // Children of timeline
+        children: PropTypes.object // Children of the room body
     };
 
     render() {
