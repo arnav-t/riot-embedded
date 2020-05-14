@@ -25,17 +25,15 @@ module.exports = {
                             ],
                             '@babel/react',
                             {
-                                'plugins': [
-                                    '@babel/plugin-proposal-class-properties'
-                                ]
+                                'plugins': ['@babel/plugin-proposal-class-properties']
                             }
                         ]
                     }
                 }
             },
             {
-                test:/\.css$/,
-                use:['style-loader','css-loader']
+                test:/\.s[ac]ss$/,
+                use:['style-loader', 'css-loader', 'sass-loader']
             }
         ]
     },

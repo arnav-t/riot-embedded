@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import ThemeContext from './theme-context.jsx';
 
 /**
  * React component for composing and sending messages
@@ -96,17 +97,21 @@ export default class MessageComposer extends PureComponent {
         event.stopPropagation();
     }
 
+    // Consume theme context
+    static contextType = ThemeContext;
     render() {
+        let theme = this.context;
+
         let placeholder = this.state.busy ? 'Sending...' : 'Send a message...';
         let shouldSend = this.state.value.length > 0 && !this.state.busy;
 
         return (
             <form className='composer-panel' onSubmit={this.onSubmit}>
-                <textarea className='msg-composer darker-bg scrollable' 
+                <textarea className={`msg-composer bg-primary-${theme.theme} scrollable-${theme.theme}`} 
                     value={this.state.value} onChange={this.onChange} 
                     onKeyDown={this.onKeyDown}
                     placeholder={placeholder} />
-                <input className='send-button' type='submit' 
+                <input className={`send-button-${theme.highlight}`} type='submit' 
                     disabled={!shouldSend} value='Send' />
             </form>
         );

@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import ThemeContext from './theme-context.jsx';
 
 /**
  * React component for a single room tile in the list of rooms
@@ -15,12 +16,17 @@ export default class RoomTile extends PureComponent {
         onClick: PropTypes.func.isRequired // Callback for handling clicks
     };
 
+    // Consume theme context
+    static contextType = ThemeContext;
     render() {
+        let theme = this.context;
+
         // Set appropriate class if it is selected
-        let className = this.props.selected ? 'highlighted' : 'dark-bg';
+        let className = this.props.selected ? 
+            `highlight-${theme.highlight}` : `bg-secondary-${theme.theme}`;
         
         return (
-            <li className={`list-panel-item hoverable 
+            <li className={`list-panel-item hoverable-${theme.highlight} 
                 ${className}`} onClick={this.props.onClick} id={this.props.room.roomId} >
                 {this.props.room.name}
             </li>

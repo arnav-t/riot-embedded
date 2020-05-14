@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import EventTile from './event-tile.jsx';
+import ThemeContext from './theme-context.jsx';
 
 /**
  * React component for the room timeline
@@ -16,7 +17,11 @@ export default class TimelinePanel extends PureComponent {
         children: PropTypes.object // Children of the room body
     };
 
+    // Consume theme context
+    static contextType = ThemeContext;
     render() {
+        let theme = this.context;
+
         // Construct timeline from room
         let timeline = [];
         if (this.props.room) {
@@ -31,7 +36,9 @@ export default class TimelinePanel extends PureComponent {
         
         return (
             <div className='main-body'>
-                <div className='darker-bg body-panel scrollable'>
+                <div className={
+                    `bg-primary-${theme.theme} body-panel scrollable-${theme.theme}`
+                }>
                     <ul className='list-panel'>
                         {timeline}
                     </ul>

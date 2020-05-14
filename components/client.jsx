@@ -4,6 +4,7 @@ import RoomsList from './rooms-list';
 import TimelinePanel from './timeline-panel.jsx';
 import RoomHeader from './room-header';
 import MessageComposer from './message-composer';
+import ThemeContext from './theme-context.jsx';
 
 /** 
  * React component for the client 
@@ -74,17 +75,21 @@ export default class Client extends Component{
         });
     }
 
+    // Consume theme context
+    static contextType = ThemeContext;
     render() {
+        let theme = this.context;
+
         // Get current room ID
         let currentRoomId = this.state.room ? this.state.room.roomId : '';
         let homeserver = this.client.getHomeserverUrl();
 
         return (
-            <div className='client darker-bg'>
+            <div className={`client bg-priamry-${theme.theme}`}>
                 <RoomHeader homeserver={homeserver}
                     room={this.state.room} />
                 
-                <div className='client-body darker-bg'>
+                <div className={`client-body bg-primary-${theme.theme}`}>
                     <RoomsList list={this.client.getRooms()} 
                         currentRoomId={currentRoomId}
                         onClick={this.onSelectRoom} />
