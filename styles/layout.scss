@@ -38,22 +38,24 @@ body {
 }
 
 .client-body {
-    height: calc(100% - 50px);
+    overflow: hidden;
+    flex-grow: 1;
     width: 100%;
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     flex-flow: row nowrap;
 }
 
 .rooms-panel {
-    height: 100%;
+    padding-top: 15px;
+    height: inherit;
     width: max-content;
     white-space: nowrap;
     z-index: 97;
 }
 
 .main-body {
-    height: 100%;
+    height: inherit;
     width: 100%;
     display: flex;
     flex-flow: column;
@@ -63,13 +65,17 @@ body {
 }
 
 .body-panel {
-    height: 100%;
+    height: inherit;
     padding-left: 15px;
     flex-grow: 1;
     display: flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
 }
 
 .list-panel {
+    margin-top: auto;
+    height: fit-content;
     padding-left: 0;
     padding-right: 0;
     display: flex;
@@ -84,7 +90,7 @@ body {
 
 .composer-panel {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     box-shadow: 0 0 5px $color-light-shadow;
     z-index: 50;
 }
