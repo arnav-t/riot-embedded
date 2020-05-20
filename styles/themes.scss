@@ -1,0 +1,99 @@
+@import './layout.scss';
+
+/* Highlights */
+// Pink
+.send-button-pink {
+    @extend .send-button;
+    background-color: $color-highlight-pink;
+    color: $color-txt-light;
+}
+
+.highlight-pink {
+    z-index: 98;
+    color: $color-txt-light;
+    background-color: $color-highlight-pink;
+    box-shadow: 0 0 5px $color-light-shadow;
+}
+
+.hoverable-pink:hover {
+    @extend .hoverable;
+    color: $color-txt-light;
+    background-color: $color-highlight-pink;
+}
+
+// Green
+.send-button-green {
+    @extend .send-button;
+    background-color: $color-highlight-green;
+    color: $color-txt-dark;
+}
+
+.highlight-green {
+    z-index: 98;
+    color: $color-txt-dark;
+    background-color: $color-highlight-green;
+    box-shadow: 0 0 5px $color-light-shadow;
+}
+
+.hoverable-green:hover {
+    @extend .hoverable;
+    color: $color-txt-dark;
+    background-color: $color-highlight-green;
+}
+
+
+/* Themes */
+// Dark
+.bg-primary-dark {
+    color: $color-txt-light;
+    background-color: $color-primary-dark;
+}
+
+.bg-secondary-dark {
+    color: $color-txt-light;
+    background-color: $color-secondary-dark;
+}
+
+.scrollable-dark {
+    @extend .scrollable;
+}
+
+.scrollable-dark::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: $color-scrollbar-dark;
+}
+
+.scrollable-dark::-webkit-scrollbar-thumb:hover {
+    background-color: $color-scrollbar-hover-dark;
+}
+
+// Dark
+.bg-primary-light {
+    color: $color-txt-dark;
+    background-color: $color-primary-light;
+}
+
+.bg-secondary-light {
+    color: $color-txt-dark;
+    background-color: $color-secondary-light;
+}
+
+.scrollable-light {
+    @extend .scrollable;
+}
+
+.scrollable-light::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: $color-scrollbar-light;
+}
+
+.scrollable-light::-webkit-scrollbar-thumb:hover {
+    background-color: $color-scrollbar-hover-light;
+}
+
+
+
+/* ||| Text styles */
+.text-muted {
+    color: $color-txt-muted;
+}

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import RoomsList from './rooms-list';
 import TimelinePanel from './timeline-panel.jsx';
 import RoomHeader from './room-header';
+import MessageComposer from './message-composer';
+import ThemeContext from './theme-context.jsx';
 
 /** 
  * React component for the client 
@@ -34,8 +36,19 @@ export default class Client extends Component{
 
         this.init = this.init.bind(this);
         this.onSelectRoom = this.onSelectRoom.bind(this);
+        this._onRoomTimeline = this._onRoomTimeline.bind(this);
 
         this.init();
+    }
+
+    /** Listener for timeline events */
+    _onRoomTimeline(event, room) {
+        if (room === this.state.room) {
+            // If event is from current room, update
+            this.setState({
+                room: room
+            });
+        }
     }
 
     /** Connect client to homeserver */
@@ -47,6 +60,9 @@ export default class Client extends Component{
                 this.setState({
                     room: this.client.getRoom(this.props.roomId)
                 });
+
+                // Add listeners
+                this.client.on('Room.timeline', this._onRoomTimeline);
             }
         });
     }
@@ -59,23 +75,31 @@ export default class Client extends Component{
         });
     }
 
+    // Consume theme context
+    static contextType = ThemeContext;
     render() {
+        let theme = this.context;
+
         // Get current room ID
         let currentRoomId = this.state.room ? this.state.room.roomId : '';
         let homeserver = this.client.getHomeserverUrl();
 
         return (
-            <div className='client darker-bg'>
+            <div className={`client bg-primary-${theme.theme}`}>
                 <RoomHeader homeserver={homeserver}
                     room={this.state.room} />
                 
-                <div className='client-body darker-bg'>
+                <div className={`client-body bg-primary-${theme.theme}`}>
                     <RoomsList list={this.client.getRooms()} 
                         currentRoomId={currentRoomId}
                         onClick={this.onSelectRoom} />
 
                     <TimelinePanel homeserver={homeserver}
-                        room={this.state.room} />
+                        room={this.state.room}> 
+                        <MessageComposer client={this.client} 
+                            roomId={currentRoomId} />
+                        
+                    </TimelinePanel>
                 </div>
             </div>
         );

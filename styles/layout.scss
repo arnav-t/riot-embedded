@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+// Font
+$font-main: 'Roboto', sans-serif;
+
+// Colors
+@import './colors.scss';
+
+/* || Layout */
+html {
+    height: 100%
+}
+
+body {
+    overflow: hidden;
+    margin: 0;
+    font-family: $font-main;
+    height: 100%;
+}
+
+#root {
+    height: 100%;
+}
+
+.client {
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.top-bar {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    z-index: 999;
+    align-items: center;
+    padding-left: 100px;
+}
+
+.client-body {
+    overflow: hidden;
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    flex-flow: row nowrap;
+}
+
+.rooms-panel {
+    padding-top: 15px;
+    height: inherit;
+    width: max-content;
+    white-space: nowrap;
+    z-index: 97;
+}
+
+.main-body {
+    height: inherit;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
+.body-panel {
+    height: inherit;
+    padding-left: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
+}
+
+.list-panel {
+    margin-top: auto;
+    height: fit-content;
+    padding-left: 0;
+    padding-right: 0;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
+    list-style: none;
+}
+
+.list-panel-item {
+    padding: 5px;
+}
+
+.composer-panel {
+    display: flex;
+    align-items: stretch;
+    box-shadow: 0 0 5px $color-light-shadow;
+    z-index: 50;
+}
+
+.msg-composer {
+    min-height: 45px;
+    width: 100%;
+    padding: 15px; 
+    resize: none;
+    border: none;
+    outline: none;
+}
+
+.msg-composer:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* ||| Avatar */
+.rounded-img {
+    background-color: black;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: 20px;
+    margin-left: 20px;
+    border-radius: 50%;
+    object-fit: contain;
+    -webkit-user-select: none;        
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none; 
+}
+
+/* ||| Timeline event */
+.msg-body {
+    margin-left: 15px;
+    margin-right: 15px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.msg-data {
+    height: fit-content;
+}
+
+/* || Styling and themes */
+.send-button {
+    height: 100%;
+    width: 75px;
+    padding: 0px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    box-shadow: none;
+
+    transition: width 0.2s, box-shadow 0.2s;
+}
+
+.send-button:disabled {
+    width: 0px;
+}
+
+.send-button:hover {
+    box-shadow: 0 0 20px $color-light-shadow;
+}
+
+/* ||| Scrollbar */
+.scrollable {
+    overflow: auto;
+}
+
+.scrollable::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+}
+
+/* ||| Animations */
+.hoverable:hover {
+    box-shadow: 0 0 5px $color-light-shadow;
+    z-index: 99;
+    cursor: pointer;
+}

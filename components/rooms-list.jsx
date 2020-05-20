@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import RoomTile from './room-tile.jsx';
+import ThemeContext from './theme-context.jsx';
 
 /**
  * React component for list of rooms
@@ -16,7 +17,11 @@ export default class RoomsList extends PureComponent {
         onClick: PropTypes.func // Callback for onclick events
     };
 
+    // Consume theme context
+    static contextType = ThemeContext;
     render() {
+        let theme = this.context;
+
         // Construct a list of RoomTile components from list of rooms
         let rooms = [];
         for (let room of this.props.list) {
@@ -28,7 +33,7 @@ export default class RoomsList extends PureComponent {
         }
         
         return (
-            <div className='dark-bg rooms-panel'>
+            <div className={`bg-secondary-${theme.theme} rooms-panel`}>
                 <ul className='list-panel'>
                     {rooms}
                 </ul>

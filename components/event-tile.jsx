@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import Avatar from './avatar.jsx';
+import ThemeContext from './theme-context.jsx';
 
 /**
  * React component for an event in the room timeline
@@ -14,7 +15,11 @@ export default class EventTile extends PureComponent {
         mxEvent: PropTypes.object.isRequired // Event object
     };
 
+    // Consume theme context
+    static contextType = ThemeContext;
     render() {
+        let theme = this.context;
+
         // Extract details from event
         let sender = this.props.mxEvent.sender;
         let avatarUrl = sender.getAvatarUrl(this.props.homeserver, 32, 32, 'scale', false);
@@ -23,10 +28,10 @@ export default class EventTile extends PureComponent {
         
         return (
             <li>
-                <div className='list-panel-item darker-bg msg-body'>
+                <div className={`list-panel-item bg-primary-${theme.theme} msg-body`}>
                     <Avatar imgUrl={avatarUrl} size={32} />
                     <div className='msg-data'>
-                        <h4>{name} <i className='txt-muted'>{userId}</i></h4>
+                        <h4>{name} <i className='text-muted'>{userId}</i></h4>
                         <p>
                             {mxBody}
                         </p>
