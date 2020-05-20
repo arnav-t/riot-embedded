@@ -85,7 +85,7 @@ export default class Client extends Component{
         let homeserver = this.client.getHomeserverUrl();
 
         return (
-            <div className={`client bg-priamry-${theme.theme}`}>
+            <div className={`client bg-primary-${theme.theme}`}>
                 <RoomHeader homeserver={homeserver}
                     room={this.state.room} />
                 
