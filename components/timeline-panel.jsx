@@ -22,23 +22,33 @@ export default class TimelinePanel extends PureComponent {
     constructor(props) {
         super(props);
 
+        this.oldRoomId = this.props.room ? this.props.room.roomId : null;
+
         this.loadPrevious = this.loadPrevious.bind(this);
         this.onScroll = this.onScroll.bind(this);
     }
 
     componentDidUpdate() {
         if ( !(this.props.room) ) return;
-        console.log('BZZZZ');
         let timelineBody = document.getElementById('timeline-body');
-        let height = timelineBody.clientHeight;
+        
+        // Scroll to bottom on room change
+        if ( this.props.room.roomId !== this.oldRoomId ) {
+            let height = timelineBody.clientHeight;
+            timelineBody.scrollTop += height + 999999;
+            this.oldRoomId = this.props.room.roomId;   
+        }
+
+        // Load messages if timeline not filled
         if (timelineBody.scrollTop <= 0) {
+            let height = timelineBody.clientHeight;
             this.loadPrevious(height);
         }
     }
 
     /** Load older messages */
     loadPrevious(oldHeight) {
-        this.props.client.scrollback(this.props.room, 5, () => {
+        this.props.client.scrollback(this.props.room, 30, () => {
             let timelineList = document.getElementById('timeline-list');
             let newHeight = timelineList.clientHeight;
 
