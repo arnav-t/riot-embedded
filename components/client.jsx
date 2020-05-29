@@ -93,9 +93,8 @@ export default class Client extends Component{
                     <RoomsList list={this.client.getRooms()} 
                         currentRoomId={currentRoomId}
                         onClick={this.onSelectRoom} />
-
                     <TimelinePanel homeserver={homeserver}
-                        room={this.state.room}> 
+                        room={this.state.room} client={this.client} > 
                         <MessageComposer client={this.client} 
                             roomId={currentRoomId} />
                         
