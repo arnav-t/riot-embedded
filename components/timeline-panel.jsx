@@ -48,7 +48,21 @@ export default class TimelinePanel extends PureComponent {
 
     /** Load older messages */
     loadPrevious(oldHeight) {
+        let loader = document.getElementById('timeline-loading');
+        
+        // Hide loader if at end of timeline
+        if (this.props.room.oldState.paginationToken == null) {
+            loader.style.display = 'none';
+            return;
+        }
+
+        // Show loader
+        loader.style.display = 'block';
+        
         this.props.client.scrollback(this.props.room, 30, () => {
+            // Hide loader
+            loader.style.display = 'none';
+
             let timelineList = document.getElementById('timeline-list');
             let newHeight = timelineList.clientHeight;
 
@@ -100,6 +114,9 @@ export default class TimelinePanel extends PureComponent {
                 <div className={
                     `bg-primary-${theme.theme} body-panel scrollable-${theme.theme}`
                 } onScroll={this.onScroll} id='timeline-body' >
+                    <div className='loader-panel'>
+                        <div id='timeline-loading' className={`loader-${theme.theme}`}></div>
+                    </div>
                     <ul className='list-panel' id='timeline-list' >
                         {timeline}
                     </ul>

@@ -6,7 +6,7 @@ import ThemeContext from './components/theme-context.jsx';
 require('./styles/main.scss');
 
 ReactDOM.render(
-    <ThemeContext.Provider value={{theme: 'dark', highlight: 'green'}}>
+    <ThemeContext.Provider value={{theme: 'dark', highlight: 'pink'}}>
         <Client {...config} />
     </ThemeContext.Provider>,
     document.getElementById('root')

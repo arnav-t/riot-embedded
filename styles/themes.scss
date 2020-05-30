@@ -67,7 +67,13 @@
     background-color: $color-scrollbar-hover-dark;
 }
 
-// Dark
+.loader-dark {
+    @extend .loader;
+    border-top: 4px solid $color-secondary-light;
+    border-left: 4px solid $color-secondary-light;
+}
+
+// Light
 .bg-primary-light {
     color: $color-txt-dark;
     background-color: $color-primary-light;
@@ -91,7 +97,11 @@
     background-color: $color-scrollbar-hover-light;
 }
 
-
+.loader-light {
+    @extend .loader;
+    border-top: 4px solid $color-secondary-dark;
+    border-left: 4px solid $color-secondary-dark;
+}
 
 /* ||| Text styles */
 .text-muted {
