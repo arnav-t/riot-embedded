@@ -5,6 +5,7 @@ import TimelinePanel from './timeline-panel.jsx';
 import RoomHeader from './room-header';
 import MessageComposer from './message-composer';
 import ThemeContext from './theme-context.jsx';
+import MessageInterface from '../classes/message-interface.js';
 
 /** 
  * React component for the client 
@@ -33,6 +34,8 @@ export default class Client extends Component{
             accessToken: props.accessToken,
             userId: props.userId
         });
+        // TODO: Load from whitelist from config
+        this.messageInterface = new MessageInterface();
 
         this.init = this.init.bind(this);
         this.onSelectRoom = this.onSelectRoom.bind(this);
