@@ -5,7 +5,7 @@ import TimelinePanel from './timeline-panel.jsx';
 import RoomHeader from './room-header';
 import MessageComposer from './message-composer';
 import ThemeContext from './theme-context.jsx';
-import MessageInterface from '../classes/message-interface.js';
+import MessageHandler from '../classes/message-handler.js';
 
 /** 
  * React component for the client 
@@ -26,7 +26,9 @@ export default class Client extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            room: null
+            room: null,
+            theme: 'dark',
+            highlight: 'pink'
         };
         this.sdk = require('matrix-js-sdk');
         this.client = this.sdk.createClient({
@@ -35,11 +37,15 @@ export default class Client extends Component{
             userId: props.userId
         });
         // TODO: Load from whitelist from config
-        this.messageInterface = new MessageInterface();
+        this.messageHandler = new MessageHandler();
 
         this.init = this.init.bind(this);
         this.onSelectRoom = this.onSelectRoom.bind(this);
         this._onRoomTimeline = this._onRoomTimeline.bind(this);
+        this.setTheme = this.setTheme.bind(this);
+
+        // Consume events from MessageHandler
+        this.messageHandler.on('setTheme', this.setTheme);
 
         this.init();
     }
@@ -78,32 +84,38 @@ export default class Client extends Component{
         });
     }
 
-    // Consume theme context
-    static contextType = ThemeContext;
-    render() {
-        let theme = this.context;
+    /** Consume setTheme event from MessageHandler */
+    setTheme(args) {
+        this.setState({
+            theme: args.theme ? args.theme : this.state.theme,
+            highlight: args.highlight ? args.highlight : this.state.highlight
+        });
+    }
 
+    render() {
         // Get current room ID
         let currentRoomId = this.state.room ? this.state.room.roomId : '';
         let homeserver = this.client.getHomeserverUrl();
 
         return (
-            <div className={`client bg-primary-${theme.theme}`}>
-                <RoomHeader homeserver={homeserver}
-                    room={this.state.room} />
-                
-                <div className={`client-body bg-primary-${theme.theme}`}>
-                    <RoomsList list={this.client.getRooms()} 
-                        currentRoomId={currentRoomId}
-                        onClick={this.onSelectRoom} />
-                    <TimelinePanel homeserver={homeserver}
-                        room={this.state.room} client={this.client} > 
-                        <MessageComposer client={this.client} 
-                            roomId={currentRoomId} />
-                        
-                    </TimelinePanel>
+            <ThemeContext.Provider value={{theme: this.state.theme, highlight: this.state.highlight}}>
+                <div className={`client bg-primary-${this.state.theme}`}>
+                    <RoomHeader homeserver={homeserver}
+                        room={this.state.room} />
+                    
+                    <div className={`client-body bg-primary-${this.state.theme}`}>
+                        <RoomsList list={this.client.getRooms()} 
+                            currentRoomId={currentRoomId}
+                            onClick={this.onSelectRoom} />
+                        <TimelinePanel homeserver={homeserver}
+                            room={this.state.room} client={this.client} > 
+                            <MessageComposer client={this.client} 
+                                roomId={currentRoomId} />
+                            
+                        </TimelinePanel>
+                    </div>
                 </div>
-            </div>
+            </ThemeContext.Provider>
         );
     }
 }
