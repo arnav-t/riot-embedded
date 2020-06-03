@@ -27,8 +27,10 @@ export default class Client extends Component{
         super(props);
         this.state = {
             room: null,
-            theme: 'dark',
-            highlight: 'pink'
+            theme: 'dark',  // Client theme (dark/light)
+            highlight: 'pink',   // Client theme highlight (pink/green)
+            roomHeader: true,   // If room header should be displayed
+            roomsList: true,    // If rooms list should be displayed
         };
         this.sdk = require('matrix-js-sdk');
         this.client = this.sdk.createClient({
@@ -43,9 +45,13 @@ export default class Client extends Component{
         this.onSelectRoom = this.onSelectRoom.bind(this);
         this._onRoomTimeline = this._onRoomTimeline.bind(this);
         this.setTheme = this.setTheme.bind(this);
+        this.toggleRoomHeader = this.toggleRoomHeader.bind(this);
+        this.toggleRoomsList = this.toggleRoomsList.bind(this);
 
         // Consume events from MessageHandler
         this.messageHandler.on('setTheme', this.setTheme);
+        this.messageHandler.on('roomHeader', this.toggleRoomHeader);
+        this.messageHandler.on('roomsList', this.toggleRoomsList);
 
         this.init();
     }
@@ -92,6 +98,20 @@ export default class Client extends Component{
         });
     }
 
+    /** Consume roomHeader event from MessageHandler */
+    toggleRoomHeader(args) {
+        this.setState({
+            roomHeader: args
+        });
+    }
+
+    /** Consume roomsList event from MessageHandler */
+    toggleRoomsList(args) {
+        this.setState({
+            roomsList: args
+        });
+    }
+
     render() {
         // Get current room ID
         let currentRoomId = this.state.room ? this.state.room.roomId : '';
@@ -100,13 +120,13 @@ export default class Client extends Component{
         return (
             <ThemeContext.Provider value={{theme: this.state.theme, highlight: this.state.highlight}}>
                 <div className={`client bg-primary-${this.state.theme}`}>
-                    <RoomHeader homeserver={homeserver}
-                        room={this.state.room} />
+                    {this.state.roomHeader && (<RoomHeader homeserver={homeserver}
+                        room={this.state.room} />)}              
                     
                     <div className={`client-body bg-primary-${this.state.theme}`}>
-                        <RoomsList list={this.client.getRooms()} 
+                        {this.state.roomsList && (<RoomsList list={this.client.getRooms()} 
                             currentRoomId={currentRoomId}
-                            onClick={this.onSelectRoom} />
+                            onClick={this.onSelectRoom} />)}
                         <TimelinePanel homeserver={homeserver}
                             room={this.state.room} client={this.client} > 
                             <MessageComposer client={this.client} 

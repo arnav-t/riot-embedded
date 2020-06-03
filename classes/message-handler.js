@@ -69,6 +69,38 @@ export default class MessageHandler extends EventEmitter{
             }, '*');
             break;
 
+        case 'roomHeader':
+            // Toggle room header
+            if (typeof args !== 'boolean') {
+                parent.postMessage({
+                    'status' : 'error',
+                    'message' : 'Invalid or missing arguments.'
+                }, '*');
+                return;
+            }
+            this.emit('roomHeader', args);
+            parent.postMessage({
+                'status' : 'success',
+                'message' : 'Toggled room header.'
+            }, '*');
+            break;
+
+        case 'roomsList':
+            // Toggle rooms list
+            if (typeof args !== 'boolean') {
+                parent.postMessage({
+                    'status' : 'error',
+                    'message' : 'Invalid or missing arguments.'
+                }, '*');
+                return;
+            }
+            this.emit('roomsList', args);
+            parent.postMessage({
+                'status' : 'success',
+                'message' : 'Toggled rooms list.'
+            }, '*');
+            break;
+
         default:
             // No matching command
             parent.postMessage({
