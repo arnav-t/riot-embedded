@@ -21,6 +21,11 @@
     background-color: $color-highlight-pink;
 }
 
+.timeline-img-pink {
+    @extend .timeline-img;
+    border-color: $color-highlight-pink;
+}
+
 // Green
 .send-button-green {
     @extend .send-button;
@@ -41,6 +46,10 @@
     background-color: $color-highlight-green;
 }
 
+.timeline-img-green {
+    @extend .timeline-img;
+    border-color: $color-highlight-green;
+}
 
 /* Themes */
 // Dark

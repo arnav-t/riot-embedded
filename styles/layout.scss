@@ -6,6 +6,9 @@ $font-main: 'Roboto', sans-serif;
 // Colors
 @import './colors.scss';
 
+// Layout values
+$body-panel-h-padding: 15px;
+
 /* || Layout */
 html {
     height: 100%
@@ -66,7 +69,7 @@ body {
 
 .body-panel {
     height: inherit;
-    padding-left: 15px;
+    padding-left: $body-panel-h-padding;
     flex-grow: 1;
     display: flex;
     flex-flow: column nowrap;
@@ -122,6 +125,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.timeline-img {
+    max-width: calc(#{100%} - #{$body-panel-h-padding*2});
+    border: 2px solid grey;
 }
 
 /* ||| Avatar */

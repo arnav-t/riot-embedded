@@ -4,6 +4,7 @@ This is a version of the Matrix client intended to be embedded within iframes of
 Currently, the client supports:   
 * List of joined rooms that can be selected 
 * Live room timeline events
+* Support for image based messages     
 * Message composer and ability to send messages to a room
 * Dark and light themes for the client
 * Changeable highlight colors

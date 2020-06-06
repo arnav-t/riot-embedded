@@ -104,7 +104,7 @@ export default class TimelinePanel extends PureComponent {
                 timeline.push(
                     <EventTile key={event.event.event_id} 
                         homeserver={this.props.homeserver}
-                        mxEvent={event} />
+                        mxEvent={event} client={this.props.client} />
                 ); 
             }
         }
