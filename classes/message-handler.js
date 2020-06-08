@@ -21,6 +21,11 @@ export default class MessageHandler extends EventEmitter{
         // Origin of message event
         let origin = event.origin;
 
+        if (!origin) {
+            // Chrome fix
+            origin = event.originalEvent.origin;
+        }
+
         // If origin is in whitelist
         if ( this.origins.includes(origin) ) {
             let data = event.data;
