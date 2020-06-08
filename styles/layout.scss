@@ -6,6 +6,9 @@ $font-main: 'Roboto', sans-serif;
 // Colors
 @import './colors.scss';
 
+// Layout values
+$body-panel-h-padding: 15px;
+
 /* || Layout */
 html {
     height: 100%
@@ -66,7 +69,7 @@ body {
 
 .body-panel {
     height: inherit;
-    padding-left: 15px;
+    padding-left: $body-panel-h-padding;
     flex-grow: 1;
     display: flex;
     flex-flow: column nowrap;
@@ -107,6 +110,26 @@ body {
 .msg-composer:focus {
     outline: none;
     box-shadow: none;
+}
+
+.loader {
+    margin: 5px;
+    border: 4px solid rgba(0, 0, 0, 0);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    animation: spin 0.75s linear infinite;
+}
+
+.loader-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline-img {
+    max-width: calc(#{100%} - #{$body-panel-h-padding*2});
+    border: 2px solid grey;
 }
 
 /* ||| Avatar */
@@ -181,4 +204,13 @@ body {
     box-shadow: 0 0 5px $color-light-shadow;
     z-index: 99;
     cursor: pointer;
+}
+
+@keyframes spin {
+    0% { 
+        transform: rotate(0deg); 
+    }
+    100% { 
+        transform: rotate(360deg); 
+    }
 }

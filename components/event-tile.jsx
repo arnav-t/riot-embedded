@@ -8,11 +8,13 @@ import ThemeContext from './theme-context.jsx';
  * 
  * @param   {string} homeserver - The homeserver URL
  * @param   {object} mxEvent - The event object
+ * @param   {object} client - The matrix client object
  */
 export default class EventTile extends PureComponent {
     static propTypes = {
         homeserver: PropTypes.string.isRequired, // Homeserver URL
-        mxEvent: PropTypes.object.isRequired // Event object
+        mxEvent: PropTypes.object.isRequired, // Event object
+        client: PropTypes.object.isRequired // Client object
     };
 
     // Consume theme context
@@ -24,7 +26,24 @@ export default class EventTile extends PureComponent {
         let sender = this.props.mxEvent.sender;
         let avatarUrl = sender.getAvatarUrl(this.props.homeserver, 32, 32, 'scale', false);
         let {name, userId} = sender;
-        let mxBody = this.props.mxEvent.event.content.body;
+        let mxBody;
+
+        if (this.props.mxEvent.event.content.msgtype === 'm.image') {
+            // Load images
+            let content = this.props.mxEvent.event.content;
+            let img_url = this.props.client.mxcUrlToHttp(
+                content.info.thumbnail_url
+            );
+            mxBody = (
+                // eslint-disable-next-line react/jsx-no-target-blank
+                <a href={img_url} target='_blank'>
+                    <img src={img_url} className={`timeline-img-${theme.highlight}`} />
+                </a>
+            );
+        } else if (this.props.mxEvent.event.content.msgtype === 'm.text') {
+            // Load text only messages
+            mxBody = this.props.mxEvent.event.content.body;
+        } else return <></>; // Return empty message
         
         return (
             <li>
