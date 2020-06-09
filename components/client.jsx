@@ -31,6 +31,7 @@ export default class Client extends Component{
             highlight: 'pink',   // Client theme highlight (pink/green)
             roomHeader: true,   // If room header should be displayed
             roomsList: true,    // If rooms list should be displayed
+            msgComposer: true,  // If message composer should be displayed
         };
         this.sdk = require('matrix-js-sdk');
         this.client = this.sdk.createClient({
@@ -47,11 +48,13 @@ export default class Client extends Component{
         this.setTheme = this.setTheme.bind(this);
         this.toggleRoomHeader = this.toggleRoomHeader.bind(this);
         this.toggleRoomsList = this.toggleRoomsList.bind(this);
+        this.toggleMsgComposer = this.toggleMsgComposer.bind(this);
 
         // Consume events from MessageHandler
         this.messageHandler.on('setTheme', this.setTheme);
         this.messageHandler.on('roomHeader', this.toggleRoomHeader);
         this.messageHandler.on('roomsList', this.toggleRoomsList);
+        this.messageHandler.on('msgComposer', this.toggleMsgComposer);
 
         this.init();
     }
@@ -112,6 +115,13 @@ export default class Client extends Component{
         });
     }
 
+    /** Consume msgComposer event from MessageHandler */
+    toggleMsgComposer(args) {
+        this.setState({
+            msgComposer: args
+        });
+    }
+
     render() {
         // Get current room ID
         let currentRoomId = this.state.room ? this.state.room.roomId : '';
@@ -129,8 +139,8 @@ export default class Client extends Component{
                             onClick={this.onSelectRoom} />)}
                         <TimelinePanel homeserver={homeserver}
                             room={this.state.room} client={this.client} > 
-                            <MessageComposer client={this.client} 
-                                roomId={currentRoomId} />
+                            {this.state.msgComposer ? <MessageComposer client={this.client} 
+                                roomId={currentRoomId} /> : <></>}
                             
                         </TimelinePanel>
                     </div>

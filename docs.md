@@ -113,3 +113,22 @@ iframe.contentWindow.postMessage({
     message: 'Toggled rooms list.'
 }
 ```
+#### Toggle `messageComposer`
+```js
+iframe.contentWindow.postMessage({
+    cmd: 'msgComposer',
+    args: false
+}, origin);
+```
+*Arguments:*
+
+`args` (boolean) -  
+`false` for hidden, `true` for visible  
+
+*Response:*
+```js
+{
+    status: 'success', 
+    message: 'Toggled message composer.'
+}
+```

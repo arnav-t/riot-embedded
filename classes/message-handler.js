@@ -106,6 +106,22 @@ export default class MessageHandler extends EventEmitter{
             }, '*');
             break;
 
+        case 'msgComposer':
+            // Toggle message composer
+            if (typeof args !== 'boolean') {
+                parent.postMessage({
+                    'status' : 'error',
+                    'message' : 'Invalid or missing arguments.'
+                }, '*');
+                return;
+            }
+            this.emit('msgComposer', args);
+            parent.postMessage({
+                'status' : 'success',
+                'message' : 'Toggled message composer.'
+            }, '*');
+            break;
+
         default:
             // No matching command
             parent.postMessage({
