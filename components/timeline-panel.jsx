@@ -23,6 +23,7 @@ export default class TimelinePanel extends PureComponent {
         super(props);
 
         this.oldRoomId = this.props.room ? this.props.room.roomId : null;
+        this.updated = false;
 
         this.loadPrevious = this.loadPrevious.bind(this);
         this.onScroll = this.onScroll.bind(this);
@@ -32,7 +33,12 @@ export default class TimelinePanel extends PureComponent {
         if ( !(this.props.room) ) return;
         let timelineBody = document.getElementById('timeline-body');
         
-        // Scroll to bottom on room change
+        if (!this.updated) {
+            let height = document.getElementById('timeline-list').clientHeight;
+            this.loadPrevious(height);
+        }
+
+        // Scroll to bottom on room change or message
         if ( this.props.room.roomId !== this.oldRoomId ) {
             let height = timelineBody.clientHeight;
             timelineBody.scrollTop += height + 999999;
@@ -48,6 +54,7 @@ export default class TimelinePanel extends PureComponent {
 
     /** Load older messages */
     loadPrevious(oldHeight) {
+        this.updated = true;
         let loader = document.getElementById('timeline-loading');
         
         // Hide loader if at end of timeline
