@@ -32,6 +32,14 @@
     background-color: $color-highlight-pink;
 }
 
+.cross-pink {
+    @extend .cross;
+}
+
+.cross-pink:before, .cross-pink:after {
+    background-color: $color-txt-light;
+}
+
 // Green
 .send-button-green {
     @extend .send-button;
@@ -61,6 +69,14 @@
     @extend .modal-topbar;
     color: $color-txt-dark;
     background-color: $color-highlight-green;
+}
+
+.cross-green {
+    @extend .cross;
+}
+
+.cross-green:before, .cross-green:after {
+    background-color: $color-txt-dark;
 }
 
 /* Themes */

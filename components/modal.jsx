@@ -7,11 +7,13 @@ import ThemeContext from './theme-context.jsx';
  * 
  * @param   {boolean} visible - If the modal box is visible 
  * @param   {string} title - Title of the modal
+ * @param   {object} children - Form body
  */
 export default class Modal extends PureComponent {
     static propTypes = {
         visible: PropTypes.bool, // If modal is visible
-        title: PropTypes.string
+        title: PropTypes.string, // Modal title
+        children: PropTypes.object // Form body
     }
 
     constructor(props) {
@@ -41,9 +43,12 @@ export default class Modal extends PureComponent {
             <div className='modal'>
                 <div className={`modal-content-${theme.theme}`}>
                     <div className={`modal-topbar-${theme.highlight}`}>
-                        <h3>{this.props.title}</h3>
+                        <h3 className='modal-title'>{this.props.title}</h3>
+                        <div className='cross-container' onClick={this.close}>
+                            <div className={`cross-${theme.highlight}`}></div>
+                        </div>
                     </div>
-
+                    {this.props.children}
                 </div>
             </div>
         );
