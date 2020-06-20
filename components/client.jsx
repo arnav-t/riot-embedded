@@ -6,6 +6,7 @@ import RoomHeader from './room-header';
 import MessageComposer from './message-composer';
 import ThemeContext from './theme-context.jsx';
 import Modal from './modal';
+import SignInForm from './sign-in-form';
 import MessageHandler from '../classes/message-handler.js';
 
 /** 
@@ -131,7 +132,9 @@ export default class Client extends Component{
         return (
             <ThemeContext.Provider value={{theme: this.state.theme, highlight: this.state.highlight}}>
                 <div className={`client bg-primary-${this.state.theme}`}>
-                    <Modal visible={false} title="Test"/>
+                    <Modal visible={true} title='Sign in'>
+                        <SignInForm client={this.client} />
+                    </Modal>
 
                     {this.state.roomHeader && (<RoomHeader homeserver={homeserver}
                         room={this.state.room} />)}              

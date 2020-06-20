@@ -149,7 +149,7 @@ body {
 .modal-content {
     background-color: white;
     box-shadow: 0 0 10px $color-dark-shadow;
-    width: 60%;
+    width: fit-content;
     min-width: 200px;
     min-height: 50px;
 }
@@ -167,6 +167,25 @@ body {
 
 .modal-title {
     margin: auto;
+}
+
+.form {
+    display: flex;
+    margin-left: 15px;
+    margin-right: 15px;
+    padding: 5px;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-element {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.form-label {
+    margin: 0;
 }
 
 .cross-container {

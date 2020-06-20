@@ -26,12 +26,6 @@
     border-color: $color-highlight-pink;
 }
 
-.modal-topbar-pink {
-    @extend .modal-topbar;
-    color: $color-txt-light;
-    background-color: $color-highlight-pink;
-}
-
 .cross-pink {
     @extend .cross;
 }
@@ -63,12 +57,6 @@
 .timeline-img-green {
     @extend .timeline-img;
     border-color: $color-highlight-green;
-}
-
-.modal-topbar-green {
-    @extend .modal-topbar;
-    color: $color-txt-dark;
-    background-color: $color-highlight-green;
 }
 
 .cross-green {

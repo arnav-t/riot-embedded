@@ -42,7 +42,7 @@ export default class Modal extends PureComponent {
         return (
             <div className='modal'>
                 <div className={`modal-content-${theme.theme}`}>
-                    <div className={`modal-topbar-${theme.highlight}`}>
+                    <div className={`modal-topbar highlight-${theme.highlight}`}>
                         <h3 className='modal-title'>{this.props.title}</h3>
                         <div className='cross-container' onClick={this.close}>
                             <div className={`cross-${theme.highlight}`}></div>
