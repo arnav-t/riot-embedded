@@ -51,6 +51,7 @@ export default class Client extends Component{
         this.toggleRoomHeader = this.toggleRoomHeader.bind(this);
         this.toggleRoomsList = this.toggleRoomsList.bind(this);
         this.toggleMsgComposer = this.toggleMsgComposer.bind(this);
+        this.setUser = this.setUser.bind(this);
 
         // Consume events from MessageHandler
         this.messageHandler.on('setTheme', this.setTheme);
@@ -72,7 +73,7 @@ export default class Client extends Component{
     }
 
     /** Connect client to homeserver */
-    async init() {
+    async init(callback=null) {
         this.client.startClient();
         this.client.once('sync', (state) => {
             console.log(state);
@@ -81,6 +82,8 @@ export default class Client extends Component{
                     room: this.client.getRoom(this.props.roomId)
                 });
 
+                if (callback) callback();
+
                 // Add listeners
                 this.client.on('Room.timeline', this._onRoomTimeline);
             }
@@ -88,11 +91,21 @@ export default class Client extends Component{
     }
 
     /** Handle clicks from room list */
-    async onSelectRoom(e) {
+    onSelectRoom(e) {
         let roomId = e.currentTarget.getAttribute('id');
         this.setState({
             room: this.client.getRoom(roomId)
         });
+    }
+
+    setUser(userId, accessToken, callback=null) {
+        this.client = this.sdk.createClient({
+            baseUrl: this.props.baseUrl,
+            accessToken: accessToken,
+            userId: userId
+        });
+
+        this.init(callback);
     }
 
     /** Consume setTheme event from MessageHandler */
@@ -133,7 +146,7 @@ export default class Client extends Component{
             <ThemeContext.Provider value={{theme: this.state.theme, highlight: this.state.highlight}}>
                 <div className={`client bg-primary-${this.state.theme}`}>
                     <Modal visible={true} title='Sign in'>
-                        <SignInForm client={this.client} />
+                        <SignInForm client={this.client} setUser={this.setUser} />
                     </Modal>
 
                     {this.state.roomHeader && (<RoomHeader homeserver={homeserver}
