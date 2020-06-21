@@ -122,6 +122,22 @@ export default class MessageHandler extends EventEmitter{
             }, '*');
             break;
 
+        case 'login':
+            // Sign in to account using password
+            if (typeof args !== 'object') {
+                parent.postMessage({
+                    'status' : 'error',
+                    'message' : 'Invalid or missing arguments.'
+                }, '*');
+                return;
+            }
+            this.emit('login', args);
+            parent.postMessage({
+                'status' : 'success',
+                'message' : 'Attempting sign in...'
+            }, '*');
+            break;
+
         default:
             // No matching command
             parent.postMessage({

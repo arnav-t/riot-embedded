@@ -132,3 +132,26 @@ iframe.contentWindow.postMessage({
     message: 'Toggled message composer.'
 }
 ```
+### Login with username and password
+```js
+iframe.contentWindow.postMessage({
+    cmd: 'login',
+    args: {
+        user: 'username',
+        passwd: 'password'
+    }
+}, origin);
+```
+*Arguments:*
+
+`args` (object):   
+* `username` (string) - Username
+* `passwd` (string) - Password   
+
+*Response:*
+```js
+{
+    status: 'success', 
+    message: 'Attempting sign in...'
+}
+```

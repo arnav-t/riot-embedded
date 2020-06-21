@@ -48,16 +48,18 @@ export default class Client extends Component{
         this.onSelectRoom = this.onSelectRoom.bind(this);
         this._onRoomTimeline = this._onRoomTimeline.bind(this);
         this.setTheme = this.setTheme.bind(this);
+        this.setUser = this.setUser.bind(this);
         this.toggleRoomHeader = this.toggleRoomHeader.bind(this);
         this.toggleRoomsList = this.toggleRoomsList.bind(this);
         this.toggleMsgComposer = this.toggleMsgComposer.bind(this);
-        this.setUser = this.setUser.bind(this);
+        this.login = this.login.bind(this);
 
         // Consume events from MessageHandler
         this.messageHandler.on('setTheme', this.setTheme);
         this.messageHandler.on('roomHeader', this.toggleRoomHeader);
         this.messageHandler.on('roomsList', this.toggleRoomsList);
         this.messageHandler.on('msgComposer', this.toggleMsgComposer);
+        this.messageHandler.on('login', this.login);
 
         this.init();
     }
@@ -98,6 +100,7 @@ export default class Client extends Component{
         });
     }
 
+    /** Reinitialize client after login */
     setUser(userId, accessToken, callback=null) {
         this.client = this.sdk.createClient({
             baseUrl: this.props.baseUrl,
@@ -134,6 +137,22 @@ export default class Client extends Component{
     toggleMsgComposer(args) {
         this.setState({
             msgComposer: args
+        });
+    }
+
+    /** Attempt login with password */
+    login(args) {
+        let user = args.user;
+        let passwd = args.passwd;
+        if (!user || !passwd) return;
+        this.client.loginWithPassword(user, passwd, (err, data) => {
+            if (err) {
+                // Handle error
+                console.log('ERROR: ', err);
+            } else {
+                console.log('SUCCESS: ', data);
+                this.setUser(user, data.access_token);
+            }
         });
     }
 
