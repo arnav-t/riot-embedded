@@ -25,10 +25,12 @@ export default class RoomHeader extends PureComponent {
             this.props.room.getAvatarUrl(this.props.homeserver, 32, 32, 'scale', false) : 
             null;
         
+        let roomName = this.props.room ? this.props.room.name : '';
+
         return (
             <div className={`top-bar highlight-${theme.highlight}`}>
-                <Avatar imgUrl={avatarUrl} size={32} />
-                <h3>{this.props.room ? this.props.room.name : ''}</h3>
+                <Avatar imgUrl={avatarUrl} size={32} name={roomName} />
+                <h3>{roomName}</h3>
             </div>
         );
     }

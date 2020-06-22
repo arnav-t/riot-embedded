@@ -48,7 +48,7 @@ export default class EventTile extends PureComponent {
         return (
             <li>
                 <div className={`list-panel-item bg-primary-${theme.theme} msg-body`}>
-                    <Avatar imgUrl={avatarUrl} size={32} />
+                    <Avatar imgUrl={avatarUrl} size={32} name={name} />
                     <div className='msg-data'>
                         <h4>{name} <i className='text-muted'>{userId}</i></h4>
                         <p>

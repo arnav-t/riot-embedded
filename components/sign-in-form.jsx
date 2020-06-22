@@ -19,8 +19,8 @@ export default class SignInForm extends PureComponent {
     }
 
     static propTypes = {
-        client: PropTypes.object.isRequired,
-        setUser: PropTypes.func.isRequired
+        client: PropTypes.object.isRequired, // Client object
+        setUser: PropTypes.func.isRequired // Callback to change user
     }
 
     onSubmit(event) {

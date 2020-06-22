@@ -240,6 +240,22 @@ body {
     user-select: none; 
 }
 
+.rounded-container {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: 20px;
+    margin-left: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    -webkit-user-select: none;   
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /* ||| Timeline event */
 .msg-body {
     margin-left: 15px;
