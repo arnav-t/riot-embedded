@@ -103,6 +103,28 @@
     background-color: $color-primary-dark;
 }
 
+.msg-body-dark {
+    @extend .msg-body;
+    background-color: $color-primary-dark;
+}
+
+.msg-body-dark:hover {
+    background-color: $color-secondary-dark;
+}
+
+.msg-tool-dark {
+    @extend .msg-tool;
+    background-color: $color-primary-dark;
+}
+
+.msg-tool-dark:hover {
+    background-color: $color-secondary-dark;
+}
+
+.ico-dark {
+    filter: invert(80%);
+}
+
 // Light
 .bg-primary-light {
     color: $color-txt-dark;
@@ -136,6 +158,28 @@
 .modal-content-light {
     @extend .modal-content;
     background-color: $color-primary-light;
+}
+
+.msg-body-light {
+    @extend .msg-body;
+    background-color: $color-primary-light;
+}
+
+.msg-body-light:hover {
+    background-color: $color-secondary-light;
+}
+
+.msg-tool-light {
+    @extend .msg-tool;
+    background-color: $color-primary-light;
+}
+
+.msg-tool-light:hover {
+    background-color: $color-secondary-light;
+}
+
+.ico-light {
+    filter: invert(30%);
 }
 
 /* ||| Text styles */

@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import Avatar from './avatar.jsx';
+import MessageToolbar from './message-toolbar.jsx';
 import ThemeContext from './theme-context.jsx';
 
 /**
@@ -47,8 +48,9 @@ export default class EventTile extends PureComponent {
         
         return (
             <li>
-                <div className={`list-panel-item bg-primary-${theme.theme} msg-body`}>
+                <div className={`list-panel-item msg-body-${theme.theme}`}>
                     <Avatar imgUrl={avatarUrl} size={32} name={name} />
+                    <MessageToolbar />
                     <div className='msg-data'>
                         <h4>{name} <i className='text-muted'>{userId}</i></h4>
                         <p>
