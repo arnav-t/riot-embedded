@@ -28,7 +28,11 @@ export default class RoomsList extends PureComponent {
             rooms.push(
                 <RoomTile key={room.roomId} room={room} 
                     selected={room.roomId === this.props.currentRoomId}
-                    onClick={this.props.onClick} />
+                    onClick={event => {
+                        if (room.roomId !== this.props.currentRoomId) {
+                            this.props.onClick(event);
+                        }
+                    }} />
             );
         }
         

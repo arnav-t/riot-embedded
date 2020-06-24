@@ -9,14 +9,16 @@ import ThemeContext from './theme-context.jsx';
  * @param   {string} homeserver - The homeserver URL
  * @param   {object} room - The room object
  * @param   {object} client - The client object
- * @param   {object} children - Children of room timeline
+ * @param   {array} children - Children of room timeline
+ * @param   {func} replyTo - Callback for setting reply 
  */
 export default class TimelinePanel extends PureComponent {
     static propTypes = {
         homeserver: PropTypes.string.isRequired, // Homeserver URL
         room: PropTypes.object, // Room object
         client: PropTypes.object, // Client object
-        children: PropTypes.object // Children of the room body
+        children: PropTypes.array, // Children of the room body
+        replyTo: PropTypes.func // Callback for setting reply
     };
 
     constructor(props) {
@@ -111,7 +113,8 @@ export default class TimelinePanel extends PureComponent {
                 timeline.push(
                     <EventTile key={event.event.event_id} 
                         homeserver={this.props.homeserver}
-                        mxEvent={event} client={this.props.client} />
+                        mxEvent={event} client={this.props.client}
+                        replyTo={this.props.replyTo} />
                 ); 
             }
         }

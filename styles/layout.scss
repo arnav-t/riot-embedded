@@ -216,7 +216,7 @@ body {
     content: ' ';
     height: 25px;
     width: 2px;
-    background-color: white;
+    background-color: gray;
 }
 .cross:before {
     transform: rotate(45deg);
@@ -322,6 +322,19 @@ body {
 }
 
 .send-button:hover {
+    box-shadow: 0 0 20px $color-light-shadow;
+}
+
+.reply-popup {
+    z-index: 49;
+    border-top: 1px solid $color-light-shadow;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding-top: 5px;
+    max-height: 20%;
+    -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 1) 100%);
+    mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 1) 100%);
     box-shadow: 0 0 20px $color-light-shadow;
 }
 

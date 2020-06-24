@@ -6,18 +6,27 @@ import ThemeContext from './theme-context.jsx';
  * React component for message toolbar
  * 
  * @param   {object} mxEvent - The event object
+ * @param   {func} replyTo - Callback for setting reply
  */
 export default class MessageToolbar extends PureComponent {
     static propTypes = {
-        mxEvent: PropTypes.object.isRequired // Event object
+        mxEvent: PropTypes.object.isRequired, // Event object
+        replyTo: PropTypes.func.isRequired // Callback for setting reply
     };
 
     constructor(props) {
         super(props);
 
         this.quote = this.quote.bind(this);
+        this.reply = this.reply.bind(this);
+    }
+
+    /** Reply to this message */
+    reply() {
+        this.props.replyTo(this.props.mxEvent);
     }
     
+    /** Quote this message */
     quote() {
         let msgComposer = document.getElementById('composer-field');
         let content = this.props.mxEvent.event.content.body;
@@ -42,7 +51,8 @@ export default class MessageToolbar extends PureComponent {
             <div className='msg-toolbar'>
                 <div className={`msg-tool-${theme.theme}`}>
                     <img src='../res/reply.svg' height={20} 
-                        className={`ico-${theme.theme}`} />
+                        className={`ico-${theme.theme}`}
+                        onClick={this.reply} />
                 </div>
                 <div className={`msg-tool-${theme.theme}`}>
                     <img src='../res/quote.svg' height={20} 

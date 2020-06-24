@@ -7,6 +7,7 @@ import MessageComposer from './message-composer';
 import ThemeContext from './theme-context.jsx';
 import Modal from './modal';
 import SignInForm from './sign-in-form';
+import ReplyPopup from './reply-popup';
 import MessageHandler from '../classes/message-handler.js';
 
 /** 
@@ -34,6 +35,7 @@ export default class Client extends Component{
             roomHeader: true,   // If room header should be displayed
             roomsList: true,    // If rooms list should be displayed
             msgComposer: true,  // If message composer should be displayed
+            reply: null,    // Event to reply to
         };
         this.sdk = require('matrix-js-sdk');
         this.client = this.sdk.createClient({
@@ -53,6 +55,7 @@ export default class Client extends Component{
         this.toggleRoomsList = this.toggleRoomsList.bind(this);
         this.toggleMsgComposer = this.toggleMsgComposer.bind(this);
         this.login = this.login.bind(this);
+        this.replyTo = this.replyTo.bind(this);
 
         // Consume events from MessageHandler
         this.messageHandler.on('setTheme', this.setTheme);
@@ -94,6 +97,9 @@ export default class Client extends Component{
 
     /** Handle clicks from room list */
     onSelectRoom(e) {
+        // Unset reply
+        this.replyTo();
+        
         let roomId = e.currentTarget.getAttribute('id');
         this.setState({
             room: this.client.getRoom(roomId)
@@ -108,7 +114,17 @@ export default class Client extends Component{
             userId: userId
         });
 
+        // Unset reply
+        this.replyTo();
+        
         this.init(callback);
+    }
+
+    /** Set the reply */
+    replyTo(mxEvent=null) {
+        this.setState({
+            reply: mxEvent
+        });
     }
 
     /** Consume setTheme event from MessageHandler */
@@ -176,9 +192,15 @@ export default class Client extends Component{
                             currentRoomId={currentRoomId}
                             onClick={this.onSelectRoom} />)}
                         <TimelinePanel homeserver={homeserver}
-                            room={this.state.room} client={this.client} > 
+                            room={this.state.room} client={this.client}
+                            replyTo={this.replyTo} > 
+                            {this.state.reply && this.state.msgComposer ? 
+                                <ReplyPopup homeserver={homeserver} 
+                                    mxEvent={this.state.reply} client={this.client} 
+                                    replyTo={this.replyTo} /> : 
+                                <></>}
                             {this.state.msgComposer ? <MessageComposer client={this.client} 
-                                roomId={currentRoomId} /> : <></>}
+                                roomId={currentRoomId} mxEvent={this.state.reply} /> : <></>}
                             
                         </TimelinePanel>
                     </div>

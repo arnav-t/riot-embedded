@@ -7,11 +7,13 @@ import ThemeContext from './theme-context.jsx';
  * 
  * @param   {string} roomId - The ID of current room
  * @param   {MatrixClient} client - The client object
+ * @param   {object} mxEvent - Event to reply to
  */
 export default class MessageComposer extends PureComponent {
     static propTypes = {
         roomId: PropTypes.string.isRequired, // Current room ID
-        client: PropTypes.object.isRequired // Client object
+        client: PropTypes.object.isRequired, // Client object
+        mxEvent: PropTypes.object // Event to reply to
     };
 
     constructor(props) {
