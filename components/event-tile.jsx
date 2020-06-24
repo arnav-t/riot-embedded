@@ -50,7 +50,7 @@ export default class EventTile extends PureComponent {
             <li>
                 <div className={`list-panel-item msg-body-${theme.theme}`}>
                     <Avatar imgUrl={avatarUrl} size={32} name={name} />
-                    <MessageToolbar />
+                    <MessageToolbar mxEvent={this.props.mxEvent} />
                     <div className='msg-data'>
                         <h4>{name} <i className='text-muted'>{userId}</i></h4>
                         <p>

@@ -110,7 +110,7 @@ export default class MessageComposer extends PureComponent {
                 <textarea className={`msg-composer bg-primary-${theme.theme} scrollable-${theme.theme}`} 
                     value={this.state.value} onChange={this.onChange} 
                     onKeyDown={this.onKeyDown}
-                    placeholder={placeholder} />
+                    placeholder={placeholder} id='composer-field' />
                 <input className={`send-button-${theme.highlight}`} type='submit' 
                     disabled={!shouldSend} value='Send' />
             </form>
