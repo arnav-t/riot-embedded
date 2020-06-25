@@ -62,7 +62,7 @@ export default class ReplyPopup extends PureComponent {
         return (
             <div className='reply-popup'>
                 <div className={`list-panel-item msg-body bg-primary-${theme.theme}`}>
-                    <Avatar imgUrl={avatarUrl} size={32} name={name} />
+                    <Avatar imgUrl={avatarUrl} size={32} name={userId} />
                     <div className='msg-data'>
                         <h4>{name} <i className='text-muted'>{userId}</i></h4>
                         <p>

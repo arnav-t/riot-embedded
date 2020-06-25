@@ -21,8 +21,8 @@ import MessageHandler from '../classes/message-handler.js';
 export default class Client extends Component{
     static propTypes = {
         roomId: PropTypes.string.isRequired, // The ID of default room
-        userId: PropTypes.string.isRequired, // The ID of default user
-        accessToken: PropTypes.string.isRequired, // The access token of default user
+        userId: PropTypes.string, // The ID of default user
+        accessToken: PropTypes.string, // The access token of default user
         baseUrl: PropTypes.string.isRequired // The base URL of homeserver
     };
 
@@ -38,11 +38,7 @@ export default class Client extends Component{
             reply: null,    // Event to reply to
         };
         this.sdk = require('matrix-js-sdk');
-        this.client = this.sdk.createClient({
-            baseUrl: props.baseUrl,
-            accessToken: props.accessToken,
-            userId: props.userId
-        });
+
         // TODO: Load from whitelist from config
         this.messageHandler = new MessageHandler();
 
@@ -64,7 +60,42 @@ export default class Client extends Component{
         this.messageHandler.on('msgComposer', this.toggleMsgComposer);
         this.messageHandler.on('login', this.login);
 
-        this.init();
+        if (!props.accessToken || !props.userId) {
+            // If any accessToken or userId is absent
+            // Register as guest
+
+            this.client = this.sdk.createClient({
+                baseUrl: props.baseUrl
+            });
+
+            this.client.registerGuest({}, (err, data) => {
+                if (err) {
+                    console.log('ERR: ', err);
+                    return;
+                }
+
+                let userId = data.user_id;
+                let accessToken = data.access_token;
+                this.client = this.sdk.createClient({
+                    baseUrl: props.baseUrl,
+                    accessToken: accessToken,
+                    userId: userId
+                });
+                this.client.setGuest(true);
+                
+                this.client.peekInRoom(this.props.roomId).then(() => {
+                    this.init();
+                });
+            });
+        } else {
+            this.client = this.sdk.createClient({
+                baseUrl: props.baseUrl,
+                accessToken: props.accessToken,
+                userId: props.userId
+            });
+
+            this.init();
+        }
     }
 
     /** Listener for timeline events */
@@ -173,6 +204,8 @@ export default class Client extends Component{
     }
 
     render() {
+        if (!this.client) return <></>;
+
         // Get current room ID
         let currentRoomId = this.state.room ? this.state.room.roomId : '';
         let homeserver = this.client.getHomeserverUrl();

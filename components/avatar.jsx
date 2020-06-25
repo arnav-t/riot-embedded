@@ -18,7 +18,7 @@ export default class Avatar extends PureComponent {
     /** Get first letter of name */
     getInitialLetter() {
         let idx = 0;
-        if (this.props.name[0] in ['@', '#', '+'] && name[1]) idx++;
+        if (['@', '#', '+'].includes(this.props.name[0]) && this.props.name[1]) idx++;
         let char = String.fromCharCode(this.props.name.codePointAt(idx));
         return char.toUpperCase();
     }
