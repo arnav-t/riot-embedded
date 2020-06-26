@@ -25,6 +25,7 @@ export default class TimelinePanel extends PureComponent {
         super(props);
 
         this.oldRoomId = this.props.room ? this.props.room.roomId : null;
+        this.attachedToBottom = true;
         this.updated = false;
 
         this.loadPrevious = this.loadPrevious.bind(this);
@@ -41,7 +42,9 @@ export default class TimelinePanel extends PureComponent {
         }
 
         // Scroll to bottom on room change or message
-        if ( this.props.room.roomId !== this.oldRoomId ) {
+        if ( this.props.room.roomId !== this.oldRoomId || 
+            this.attachedToBottom ) {
+            this.attachedToBottom = true;
             let height = timelineBody.clientHeight;
             timelineBody.scrollTop += height + 999999;
             this.oldRoomId = this.props.room.roomId;   
@@ -96,9 +99,13 @@ export default class TimelinePanel extends PureComponent {
         // Get old height
         let timelineList = document.getElementById('timeline-list');
         let oldHeight = timelineList.clientHeight;
+        let maxScroll = timelineBody.scrollHeight - timelineBody.clientHeight;
+
         if (timelineBody.scrollTop <= 0) {
             this.loadPrevious(oldHeight);
-        }
+        } else if (timelineBody.scrollTop >= maxScroll) {
+            this.attachedToBottom = true;
+        } else this.attachedToBottom = false;
     }
 
     // Consume theme context
