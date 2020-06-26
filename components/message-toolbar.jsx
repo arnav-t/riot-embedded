@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import ThemeContext from './theme-context.jsx';
+import Reply from '../res/reply.svg';
+import Quote from '../res/quote.svg';
 
 /**
  * React component for message toolbar
@@ -50,12 +52,12 @@ export default class MessageToolbar extends PureComponent {
         return (
             <div className='msg-toolbar'>
                 <div className={`msg-tool-${theme.theme}`}>
-                    <img src='../res/reply.svg' height={20} 
+                    <Reply height={20} 
                         className={`ico-${theme.theme}`}
                         onClick={this.reply} />
                 </div>
                 <div className={`msg-tool-${theme.theme}`}>
-                    <img src='../res/quote.svg' height={20} 
+                    <Quote height={20} 
                         className={`ico-${theme.theme}`} 
                         onClick={this.quote} />
                 </div>

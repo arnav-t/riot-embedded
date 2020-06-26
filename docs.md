@@ -10,6 +10,7 @@ Currently, the client supports:
 * Changeable highlight colors
 * Toggleable room header and room timeline components
 * `postMessage` interface for sending commands from the parent window    
+* Support for guest mode
 
 More features to be added soon.
 ## Usage
@@ -44,6 +45,7 @@ export let config = {
     accessToken: '<DEFAULT ACCESS TOKEN>'
 };
 ```
+Leave out `userId` and `accessToken` to attempt registration as guest.
 ### Using the `postMessage` interface
 All messages will follow this format
 ```js
