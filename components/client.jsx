@@ -233,7 +233,8 @@ export default class Client extends Component{
                                     replyTo={this.replyTo} /> : 
                                 <></>}
                             {this.state.msgComposer ? <MessageComposer client={this.client} 
-                                roomId={currentRoomId} mxEvent={this.state.reply} /> : <></>}
+                                roomId={currentRoomId} mxEvent={this.state.reply} 
+                                unsetReply={this.replyTo} /> : <></>}
                             
                         </TimelinePanel>
                     </div>
