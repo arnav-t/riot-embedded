@@ -83,7 +83,7 @@ export default class Client extends Component{
                 });
                 this.client.setGuest(true);
                 
-                this.client.peekInRoom(this.props.roomId).then(() => {
+                this.client.joinRoom(this.props.roomId, {syncRoom: true}).then(() => {
                     this.init();
                 });
             });

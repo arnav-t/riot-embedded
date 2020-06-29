@@ -45,7 +45,7 @@ export default class MessageComposer extends PureComponent {
     }
 
     /** Send the value in composer */
-    async sendMessage() {
+    sendMessage() {
         if (this.state.value.length <= 0) return;
 
         const content = {
@@ -56,8 +56,6 @@ export default class MessageComposer extends PureComponent {
             value: '',
             busy: true
         });
-        this.props.client.stopPeeking();
-        await this.props.client.joinRoom(this.props.roomId, {syncRoom: true});
         this.props.client.sendMessage(this.props.roomId, content, 
             null, this._msgCallback);
         this.props.unsetReply();
