@@ -34,13 +34,17 @@ module.exports = {
             {
                 test:/\.s[ac]ss$/,
                 use:['style-loader', 'css-loader', 'sass-loader']
+            },
+            {
+                test:/\.svg$/,
+                use:['@svgr/webpack']
             }
         ]
     },
     resolve: {
         extensions: ['*', '.js', '.jsx']
     },
-    watch: true,
+    watch: false,
     devServer: {
         contentBase: path.resolve(__dirname, '.'),
         port: 9000,

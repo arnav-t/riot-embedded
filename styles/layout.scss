@@ -132,6 +132,99 @@ body {
     border: 2px solid grey;
 }
 
+.modal {
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    overflow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+    background-color: white;
+    box-shadow: 0 0 10px $color-dark-shadow;
+    width: fit-content;
+    min-width: 200px;
+    min-height: 50px;
+}
+
+.modal-topbar {
+    @extend .top-bar;
+    height: 40px;
+    z-index: inherit;
+    padding-left: 0px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.modal-title {
+    margin: auto;
+}
+
+.form {
+    display: flex;
+    margin-left: 15px;
+    margin-right: 15px;
+    padding: 5px;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-element {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.form-label {
+    margin: 0;
+}
+
+.error-msg {
+    font-size: 14px;
+    color: #f00;
+}
+
+.cross-container {
+    width: fit-content;
+    height: fit-content;
+    opacity: 0.5;
+    background-color: rgba(0,0,0,0);
+}
+
+.cross-container:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.cross {
+    margin-left: 12.5px;
+    width: 25px;
+    height: 25px;
+}
+
+.cross:before, .cross:after {
+    position: absolute;
+    content: ' ';
+    height: 25px;
+    width: 2px;
+    background-color: gray;
+}
+.cross:before {
+    transform: rotate(45deg);
+}
+.cross:after {
+    transform: rotate(-45deg);
+}
+
 /* ||| Avatar */
 .rounded-img {
     background-color: black;
@@ -140,21 +233,71 @@ body {
     margin-right: 20px;
     margin-left: 20px;
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: cover;
     -webkit-user-select: none;        
     -moz-user-select: none; 
     -ms-user-select: none; 
     user-select: none; 
 }
 
+.rounded-container {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: 20px;
+    margin-left: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    -webkit-user-select: none;   
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /* ||| Timeline event */
 .msg-body {
+    position: relative;
+    z-index: 1;
     margin-left: 15px;
     margin-right: 15px;
     display: flex;
     flex-flow: row nowrap;
     align-items: flex-start;
     height: 100%;
+    border-radius: 4px;
+}
+
+.msg-toolbar {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    float: right;
+    margin-left: auto;
+    height: fit-content;
+    width: fit-content;
+    display: none;
+    border-radius: 3px;
+    border: 1px solid $color-light-shadow;
+    border-left: 0px;
+}
+
+.msg-tool {
+    height: 22px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 1px solid gray;
+}
+
+.msg-tool:hover {
+    cursor: pointer;
+}
+
+.msg-body:hover .msg-toolbar {
+    display: flex;
 }
 
 .msg-data {
@@ -179,6 +322,20 @@ body {
 }
 
 .send-button:hover {
+    box-shadow: 0 0 20px $color-light-shadow;
+}
+
+.reply-popup {
+    z-index: 49;
+    border-top: 1px solid $color-light-shadow;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding-top: 5px;
+    min-height: 100px;
+    max-height: 20%;
+    -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 1) 100%);
+    mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 1) 100%);
     box-shadow: 0 0 20px $color-light-shadow;
 }
 

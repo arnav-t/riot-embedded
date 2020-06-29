@@ -9,20 +9,24 @@ import ThemeContext from './theme-context.jsx';
  * @param   {string} homeserver - The homeserver URL
  * @param   {object} room - The room object
  * @param   {object} client - The client object
- * @param   {object} children - Children of room timeline
+ * @param   {array} children - Children of room timeline
+ * @param   {func} replyTo - Callback for setting reply 
  */
 export default class TimelinePanel extends PureComponent {
     static propTypes = {
         homeserver: PropTypes.string.isRequired, // Homeserver URL
         room: PropTypes.object, // Room object
         client: PropTypes.object, // Client object
-        children: PropTypes.object // Children of the room body
+        children: PropTypes.array, // Children of the room body
+        replyTo: PropTypes.func // Callback for setting reply
     };
 
     constructor(props) {
         super(props);
 
         this.oldRoomId = this.props.room ? this.props.room.roomId : null;
+        this.attachedToBottom = true;
+        this.updated = false;
 
         this.loadPrevious = this.loadPrevious.bind(this);
         this.onScroll = this.onScroll.bind(this);
@@ -32,8 +36,15 @@ export default class TimelinePanel extends PureComponent {
         if ( !(this.props.room) ) return;
         let timelineBody = document.getElementById('timeline-body');
         
-        // Scroll to bottom on room change
-        if ( this.props.room.roomId !== this.oldRoomId ) {
+        if (!this.updated) {
+            let height = document.getElementById('timeline-list').clientHeight;
+            this.loadPrevious(height);
+        }
+
+        // Scroll to bottom on room change or message
+        if ( this.props.room.roomId !== this.oldRoomId || 
+            this.attachedToBottom ) {
+            this.attachedToBottom = true;
             let height = timelineBody.clientHeight;
             timelineBody.scrollTop += height + 999999;
             this.oldRoomId = this.props.room.roomId;   
@@ -48,6 +59,7 @@ export default class TimelinePanel extends PureComponent {
 
     /** Load older messages */
     loadPrevious(oldHeight) {
+        this.updated = true;
         let loader = document.getElementById('timeline-loading');
         
         // Hide loader if at end of timeline
@@ -87,9 +99,13 @@ export default class TimelinePanel extends PureComponent {
         // Get old height
         let timelineList = document.getElementById('timeline-list');
         let oldHeight = timelineList.clientHeight;
+        let maxScroll = timelineBody.scrollHeight - timelineBody.clientHeight;
+
         if (timelineBody.scrollTop <= 0) {
             this.loadPrevious(oldHeight);
-        }
+        } else if (timelineBody.scrollTop >= maxScroll) {
+            this.attachedToBottom = true;
+        } else this.attachedToBottom = false;
     }
 
     // Consume theme context
@@ -104,7 +120,8 @@ export default class TimelinePanel extends PureComponent {
                 timeline.push(
                     <EventTile key={event.event.event_id} 
                         homeserver={this.props.homeserver}
-                        mxEvent={event} client={this.props.client} />
+                        mxEvent={event} client={this.props.client}
+                        replyTo={this.props.replyTo} />
                 ); 
             }
         }

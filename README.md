@@ -32,3 +32,4 @@ export let config = {
     accessToken: '<DEFAULT ACCESS TOKEN>'
 };
 ```
+Leave out `userId` and `accessToken` to attempt registration as guest.

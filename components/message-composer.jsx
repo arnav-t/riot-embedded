@@ -7,11 +7,15 @@ import ThemeContext from './theme-context.jsx';
  * 
  * @param   {string} roomId - The ID of current room
  * @param   {MatrixClient} client - The client object
+ * @param   {object} mxEvent - Event to reply to
+ * @param   {func} unsetReply - Callback to unset reply
  */
 export default class MessageComposer extends PureComponent {
     static propTypes = {
         roomId: PropTypes.string.isRequired, // Current room ID
-        client: PropTypes.object.isRequired // Client object
+        client: PropTypes.object.isRequired, // Client object
+        mxEvent: PropTypes.object, // Event to reply to
+        unsetReply: PropTypes.func.isRequired // Callback to unset reply
     };
 
     constructor(props) {
@@ -54,6 +58,7 @@ export default class MessageComposer extends PureComponent {
         });
         this.props.client.sendMessage(this.props.roomId, content, 
             null, this._msgCallback);
+        this.props.unsetReply();
     }
 
     /** Callback for updating text */
@@ -110,7 +115,7 @@ export default class MessageComposer extends PureComponent {
                 <textarea className={`msg-composer bg-primary-${theme.theme} scrollable-${theme.theme}`} 
                     value={this.state.value} onChange={this.onChange} 
                     onKeyDown={this.onKeyDown}
-                    placeholder={placeholder} />
+                    placeholder={placeholder} id='composer-field' />
                 <input className={`send-button-${theme.highlight}`} type='submit' 
                     disabled={!shouldSend} value='Send' />
             </form>

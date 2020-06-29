@@ -1,24 +1,33 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import Avatar from './avatar.jsx';
-import MessageToolbar from './message-toolbar.jsx';
 import ThemeContext from './theme-context.jsx';
 
 /**
- * React component for an event in the room timeline
+ * React component for an reply popup
  * 
  * @param   {string} homeserver - The homeserver URL
  * @param   {object} mxEvent - The event object
  * @param   {object} client - The matrix client object
  * @param   {func} replyTo - Callback for setting reply
  */
-export default class EventTile extends PureComponent {
+export default class ReplyPopup extends PureComponent {
     static propTypes = {
         homeserver: PropTypes.string.isRequired, // Homeserver URL
         mxEvent: PropTypes.object.isRequired, // Event object
         client: PropTypes.object.isRequired, // Client object
         replyTo: PropTypes.func.isRequired // Callback for setting reply
     };
+
+    constructor(props) {
+        super(props);
+
+        this.unsetReply = this.unsetReply.bind(this);
+    }
+
+    unsetReply() {
+        this.props.replyTo();
+    }
 
     // Consume theme context
     static contextType = ThemeContext;
@@ -48,11 +57,12 @@ export default class EventTile extends PureComponent {
             mxBody = this.props.mxEvent.event.content.body;
         } else return <></>; // Return empty message
         
+        if (this.props.mxEvent == null) return <></>;
+
         return (
-            <li>
-                <div className={`list-panel-item msg-body-${theme.theme}`}>
+            <div className='reply-popup'>
+                <div className={`list-panel-item msg-body bg-primary-${theme.theme}`}>
                     <Avatar imgUrl={avatarUrl} size={32} name={userId} />
-                    <MessageToolbar mxEvent={this.props.mxEvent} replyTo={this.props.replyTo} />
                     <div className='msg-data'>
                         <h4>{name} <i className='text-muted'>{userId}</i></h4>
                         <p>
@@ -60,7 +70,10 @@ export default class EventTile extends PureComponent {
                         </p>
                     </div>
                 </div>
-            </li>
+                <div className='cross-container' onClick={this.unsetReply}>
+                    <div className={'cross'}></div>
+                </div>
+            </div>
         );
     }
 }

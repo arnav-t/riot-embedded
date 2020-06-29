@@ -10,6 +10,7 @@ Currently, the client supports:
 * Changeable highlight colors
 * Toggleable room header and room timeline components
 * `postMessage` interface for sending commands from the parent window    
+* Support for guest mode
 
 More features to be added soon.
 ## Usage
@@ -44,6 +45,7 @@ export let config = {
     accessToken: '<DEFAULT ACCESS TOKEN>'
 };
 ```
+Leave out `userId` and `accessToken` to attempt registration as guest.
 ### Using the `postMessage` interface
 All messages will follow this format
 ```js
@@ -111,5 +113,47 @@ iframe.contentWindow.postMessage({
 {
     status: 'success', 
     message: 'Toggled rooms list.'
+}
+```
+#### Toggle `messageComposer`
+```js
+iframe.contentWindow.postMessage({
+    cmd: 'msgComposer',
+    args: false
+}, origin);
+```
+*Arguments:*
+
+`args` (boolean) -  
+`false` for hidden, `true` for visible  
+
+*Response:*
+```js
+{
+    status: 'success', 
+    message: 'Toggled message composer.'
+}
+```
+### Login with username and password
+```js
+iframe.contentWindow.postMessage({
+    cmd: 'login',
+    args: {
+        user: 'username',
+        passwd: 'password'
+    }
+}, origin);
+```
+*Arguments:*
+
+`args` (object):   
+* `username` (string) - Username
+* `passwd` (string) - Password   
+
+*Response:*
+```js
+{
+    status: 'success', 
+    message: 'Attempting sign in...'
 }
 ```
