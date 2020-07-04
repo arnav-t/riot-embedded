@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import ThemeContext from './theme-context.jsx';
+import Markdown from '../classes/markdown.js';
 
 /**
  * React component for composing and sending messages
@@ -48,16 +49,18 @@ export default class MessageComposer extends PureComponent {
     sendMessage() {
         if (this.state.value.length <= 0) return;
 
-        const content = {
-            msgtype: 'm.text',
-            body: this.state.value
-        };
+        // const content = {
+        //     msgtype: 'm.text',
+        //     body: this.state.value
+        // };
         this.setState({
             value: '',
             busy: true
         });
-        this.props.client.sendMessage(this.props.roomId, content, 
-            null, this._msgCallback);
+
+        const htmlBody = new Markdown(this.state.value).toHtml();
+        this.props.client.sendHtmlMessage(this.props.roomId, this.state.value, 
+            htmlBody, this._msgCallback);
         this.props.unsetReply();
     }
 

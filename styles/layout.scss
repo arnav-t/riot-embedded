@@ -339,6 +339,13 @@ body {
     box-shadow: 0 0 20px $color-light-shadow;
 }
 
+blockquote {
+    display: block;
+    margin: 0;
+    padding-left: 15px;
+    border-left: 3px solid grey;
+}
+
 /* ||| Scrollbar */
 .scrollable {
     overflow: auto;
