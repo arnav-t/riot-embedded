@@ -28,11 +28,20 @@ export default class MessageToolbar extends PureComponent {
         this.props.replyTo(this.props.mxEvent);
     }
     
+    /** Quote multiline messages */
+    generateQuoted(msg) {
+        let lines = msg.split('\n');
+        for (let i=0; i<lines.length; i++) {
+            lines[i] = `> ${lines[i]}`;
+        }
+        return lines.join('\n');
+    }
+
     /** Quote this message */
     quote() {
         let msgComposer = document.getElementById('composer-field');
         let content = this.props.mxEvent.event.content.body;
-        let newMsg = `> ${content}\n\n${msgComposer.value}`;
+        let newMsg = `${this.generateQuoted(content)}\n\n${msgComposer.value}`;
 
         // Trigger change event
         const setValue = Object.getOwnPropertyDescriptor(msgComposer.__proto__, 'value').set;

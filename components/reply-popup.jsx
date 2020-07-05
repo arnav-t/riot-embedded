@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import Avatar from './avatar.jsx';
 import ThemeContext from './theme-context.jsx';
+import Sanitizer from '../classes/sanitizer.js';
 
 /**
  * React component for an reply popup
@@ -38,6 +39,8 @@ export default class ReplyPopup extends PureComponent {
         let sender = this.props.mxEvent.sender;
         let avatarUrl = sender.getAvatarUrl(this.props.homeserver, 32, 32, 'scale', false);
         let {name, userId} = sender;
+        let fmtBody = this.props.mxEvent.event.content.format == 'org.matrix.custom.html'
+            && this.props.mxEvent.event.content.formatted_body ? this.props.mxEvent.event.content.formatted_body : null;
         let mxBody;
 
         if (this.props.mxEvent.event.content.msgtype === 'm.image') {
@@ -54,7 +57,12 @@ export default class ReplyPopup extends PureComponent {
             );
         } else if (this.props.mxEvent.event.content.msgtype === 'm.text') {
             // Load text only messages
-            mxBody = this.props.mxEvent.event.content.body;
+            if (fmtBody) {
+                let saneHtml = new Sanitizer(fmtBody).sanitize();
+                mxBody = (
+                    <span dangerouslySetInnerHTML={{ __html: saneHtml }} />
+                );
+            } else mxBody = this.props.mxEvent.event.content.body;
         } else return <></>; // Return empty message
         
         if (this.props.mxEvent == null) return <></>;

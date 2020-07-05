@@ -1,5 +1,10 @@
 import commonmark from 'commonmark';
 
+/**
+ * Class for generating HTML from markdown messages
+ * 
+ * @param   {string} input - Message body containing markdown
+ */
 export default class Markdown {
     constructor(input) {
         // Replace < to escape HTML
