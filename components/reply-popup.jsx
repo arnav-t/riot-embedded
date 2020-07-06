@@ -39,8 +39,7 @@ export default class ReplyPopup extends PureComponent {
         let sender = this.props.mxEvent.sender;
         let avatarUrl = sender.getAvatarUrl(this.props.homeserver, 32, 32, 'scale', false);
         let {name, userId} = sender;
-        let fmtBody = this.props.mxEvent.event.content.format == 'org.matrix.custom.html'
-            && this.props.mxEvent.event.content.formatted_body ? this.props.mxEvent.event.content.formatted_body : null;
+        let fmtBody = this.props.mxEvent.event.content.formatted_body;
         let mxBody;
 
         if (this.props.mxEvent.event.content.msgtype === 'm.image') {

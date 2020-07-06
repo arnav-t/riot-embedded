@@ -51,8 +51,7 @@ export default class MessageComposer extends PureComponent {
         // Extract details from original event
         let eventId = this.props.mxEvent.event.event_id;
         let userId = this.props.mxEvent.sender.userId;
-        let fmtBody = this.props.mxEvent.event.content.format == 'org.matrix.custom.html'
-            && this.props.mxEvent.event.content.formatted_body ? this.props.mxEvent.event.content.formatted_body : 
+        let fmtBody = this.props.mxEvent.event.content.formatted_body || 
             new Sanitizer(this.props.mxEvent.event.content.body).sanitize();
         let body = this.props.mxEvent.event.content.body;
         

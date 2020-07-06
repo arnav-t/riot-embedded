@@ -8,9 +8,9 @@ import commonmark from 'commonmark';
 export default class Markdown {
     constructor(input) {
         // Replace < to escape HTML
-        this.input = input.replace(/</g, '&lt;');
+        input = input.replace(/</g, '&lt;');
         const parser = new commonmark.Parser();
-        this.parsed = parser.parse(this.input);
+        this.parsed = parser.parse(input);
     }
 
     /** Return parsed HTML */
