@@ -11,6 +11,7 @@ import ThemeContext from './theme-context.jsx';
  * @param   {object} client - The client object
  * @param   {array} children - Children of room timeline
  * @param   {func} replyTo - Callback for setting reply 
+ * @param   {boolean} showTools - If event toolbar should be shown
  */
 export default class TimelinePanel extends PureComponent {
     static propTypes = {
@@ -18,7 +19,8 @@ export default class TimelinePanel extends PureComponent {
         room: PropTypes.object, // Room object
         client: PropTypes.object, // Client object
         children: PropTypes.array, // Children of the room body
-        replyTo: PropTypes.func // Callback for setting reply
+        replyTo: PropTypes.func, // Callback for setting reply
+        showTools: PropTypes.bool // If event toolbar should be shown
     };
 
     constructor(props) {
@@ -121,7 +123,8 @@ export default class TimelinePanel extends PureComponent {
                     <EventTile key={event.event.event_id} 
                         homeserver={this.props.homeserver}
                         mxEvent={event} client={this.props.client}
-                        replyTo={this.props.replyTo} />
+                        replyTo={this.props.replyTo} 
+                        showTools={this.props.showTools} />
                 ); 
             }
         }

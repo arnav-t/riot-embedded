@@ -268,7 +268,7 @@ export default class Client extends Component{
                             onClick={this.onSelectRoom} />)}
                         <TimelinePanel homeserver={homeserver}
                             room={this.state.room} client={this.client}
-                            replyTo={this.replyTo} > 
+                            replyTo={this.replyTo} showTools={this.state.msgComposer} > 
                             {this.state.reply && this.state.msgComposer ? 
                                 <ReplyPopup homeserver={homeserver} 
                                     mxEvent={this.state.reply} client={this.client} 
