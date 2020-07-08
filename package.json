@@ -38,14 +38,16 @@
     "style-loader": "^0.23.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
     "@babel/preset-react": "^7.9.4",
+    "commonmark": "^0.29.1",
     "matrix-js-sdk": "^1.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "sanitize-html": "^1.27.0"
   },
   "babel": {
     "presets": [

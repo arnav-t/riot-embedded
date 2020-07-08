@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import ThemeContext from './theme-context.jsx';
+import Markdown from '../classes/markdown.js';
+import Sanitizer from '../classes/sanitizer.js';
 
 /**
  * React component for composing and sending messages
@@ -44,21 +46,56 @@ export default class MessageComposer extends PureComponent {
         });
     }
 
+    /** Construct reply content */
+    _constructReply(htmlBody) {
+        // Extract details from original event
+        let eventId = this.props.mxEvent.event.event_id;
+        let userId = this.props.mxEvent.sender.userId;
+        let fmtBody = this.props.mxEvent.event.content.formatted_body || 
+            new Sanitizer(this.props.mxEvent.event.content.body).sanitize();
+        let body = this.props.mxEvent.event.content.body;
+        
+        // Generate reply bodies
+        let finalFmtBody = `<mx-reply><blockquote><a href="#">In reply to</a> <a href="#">${userId}</a>`
+            + `<br>${fmtBody}</blockquote></mx-reply>` + htmlBody;
+        let finalBody = `> <${userId}> ${body}\n\n${this.state.value}`;
+        
+        // Return final content object
+        const content = {
+            msgtype: 'm.text',
+            format: 'org.matrix.custom.html',
+            body: finalBody,
+            formatted_body: finalFmtBody,
+            'm.relates_to': {
+                'm.in_reply_to': {
+                    event_id: eventId
+                }
+            }
+        };
+        return content;
+    }
+
     /** Send the value in composer */
     sendMessage() {
         if (this.state.value.length <= 0) return;
 
-        const content = {
-            msgtype: 'm.text',
-            body: this.state.value
-        };
         this.setState({
             value: '',
             busy: true
         });
-        this.props.client.sendMessage(this.props.roomId, content, 
-            null, this._msgCallback);
-        this.props.unsetReply();
+
+        const htmlBody = new Markdown(this.state.value).toHtml();
+
+        if (this.props.mxEvent == null) {
+            // Message is not a reply
+            this.props.client.sendHtmlMessage(this.props.roomId, this.state.value, 
+                htmlBody, this._msgCallback);
+        } else {
+            // Message is a reply
+            this.props.client.sendMessage(this.props.roomId, 
+                this._constructReply(htmlBody), null, this._msgCallback);
+            this.props.unsetReply();
+        }
     }
 
     /** Callback for updating text */

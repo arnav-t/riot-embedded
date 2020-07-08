@@ -27,12 +27,14 @@ export default class MessageToolbar extends PureComponent {
     reply() {
         this.props.replyTo(this.props.mxEvent);
     }
-    
+
     /** Quote this message */
     quote() {
         let msgComposer = document.getElementById('composer-field');
         let content = this.props.mxEvent.event.content.body;
-        let newMsg = `> ${content}\n\n${msgComposer.value}`;
+        // Quote every line
+        content = content.replace(/^/gm, '> ');
+        let newMsg = `${content}\n\n${msgComposer.value}`;
 
         // Trigger change event
         const setValue = Object.getOwnPropertyDescriptor(msgComposer.__proto__, 'value').set;
