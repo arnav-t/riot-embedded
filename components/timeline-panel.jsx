@@ -79,18 +79,17 @@ export default class TimelinePanel extends PureComponent {
 
             let timelineList = document.getElementById('timeline-list');
             let newHeight = timelineList.clientHeight;
-
-            // Only if not already at the top of timeline
-            if (newHeight !== oldHeight) {
-                let timelineBody = document.getElementById('timeline-body');
-                
-                // Scroll to original position (position += diff in height)
-                timelineBody.scrollTop += timelineList.clientHeight - oldHeight;
-                
-                // If scrolled to top or not fully scrolled to top
-                if (timelineBody.scrollTop <= 0) {
-                    this.loadPrevious(newHeight);
-                }
+            let timelineBody = document.getElementById('timeline-body');
+            
+            // Scroll to original position (position += diff in height)
+            let change = newHeight - oldHeight;
+            timelineBody.scrollTop += change;
+            
+            // If scrolled to top or not fully scrolled to top or
+            // if change in height is less than threshold (300)
+            if (timelineBody.scrollTop <= 0 || 
+                change < 300) {
+                this.loadPrevious(newHeight);
             }
         });
     }
