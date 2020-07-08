@@ -17,30 +17,48 @@ import MessageHandler from '../classes/message-handler.js';
  * @param   {string} userId - The ID of default user
  * @param   {string} accessToken - Access token of default user
  * @param   {string} baseUrl - Base URL of homeserver
+ * @param   {boolean} readOnly - If the client is in read-only mode
+ * @param   {string} theme - Theme (dark or light)
+ * @param   {string} highlight - Highlight color (green or pink)
+ * @param   {boolean} roomHeader - If room header should be displayed
+ * @param   {boolean} roomsList - If rooms list should be displayed
+ * @param   {boolean} msgComposer - If message composer should be displayed
+ * @param   {Array} whitelist - Whitelisted origins
+ * @param   {string} signInPrompt - Show sign in prompt for - none, guests, all 
  */
 export default class Client extends Component{
     static propTypes = {
         roomId: PropTypes.string.isRequired, // The ID of default room
         userId: PropTypes.string, // The ID of default user
         accessToken: PropTypes.string, // The access token of default user
-        baseUrl: PropTypes.string.isRequired // The base URL of homeserver
+        baseUrl: PropTypes.string.isRequired, // The base URL of homeserver
+        readOnly: PropTypes.bool, // Enable read only mode
+        theme: PropTypes.string, // Theme - default dark
+        highlight: PropTypes.string, // Highlight - default pink
+        roomHeader: PropTypes.bool, // Enable roomHeader? 
+        roomsList: PropTypes.bool, // Enable roomsList? Overrides readOnly
+        msgComposer: PropTypes.bool, // Enable msgComposer? Overrides readOnly
+        whitelist: PropTypes.array, // Whitelisted origins - ignore to allow all
+        signInPrompt: PropTypes.string // Show signInPrompt for - none, guests, all
     };
 
     constructor(props) {
         super(props);
         this.state = {
             room: null,
-            theme: 'dark',  // Client theme (dark/light)
-            highlight: 'pink',   // Client theme highlight (pink/green)
-            roomHeader: true,   // If room header should be displayed
-            roomsList: true,    // If rooms list should be displayed
-            msgComposer: true,  // If message composer should be displayed
+            theme: props.theme === undefined ? 'dark' : props.theme,  // Client theme (dark/light)
+            highlight: props.highlight === undefined ? 'pink' : props.highlight,   // Client theme highlight (pink/green)
+            roomHeader: props.roomHeader !== undefined ? props.roomHeader : true,   // If room header should be displayed
+            roomsList: props.roomsList !== undefined ? props.roomsList : 
+                props.readOnly !== undefined ? !props.readOnly : true,    // If rooms list should be displayed
+            msgComposer: props.msgComposer !== undefined ? props.msgComposer : 
+                props.readOnly !== undefined ? !props.readOnly : true,  // If message composer should be displayed
             reply: null,    // Event to reply to
         };
         this.sdk = require('matrix-js-sdk');
 
         // TODO: Load from whitelist from config
-        this.messageHandler = new MessageHandler();
+        this.messageHandler = new MessageHandler(this.props.whitelist);
 
         this.init = this.init.bind(this);
         this.onSelectRoom = this.onSelectRoom.bind(this);
@@ -82,10 +100,15 @@ export default class Client extends Component{
                     userId: userId
                 });
                 this.client.setGuest(true);
-                
-                this.client.joinRoom(this.props.roomId, {syncRoom: true}).then(() => {
-                    this.init();
-                });
+                if (props.readOnly) {
+                    this.client.peekInRoom(this.props.roomId, {syncRoom: true}).then(() => {
+                        this.init();
+                    });
+                } else {
+                    this.client.joinRoom(this.props.roomId, {syncRoom: true}).then(() => {
+                        this.init();
+                    });
+                }
             });
         } else {
             this.client = this.sdk.createClient({
@@ -94,7 +117,15 @@ export default class Client extends Component{
                 userId: props.userId
             });
 
-            this.init();
+            if (props.readOnly) {
+                this.client.peekInRoom(this.props.roomId, {syncRoom: true}).then(() => {
+                    this.init();
+                });
+            } else {
+                this.client.joinRoom(this.props.roomId, {syncRoom: true}).then(() => {
+                    this.init();
+                });
+            }
         }
     }
 
@@ -209,11 +240,22 @@ export default class Client extends Component{
         // Get current room ID
         let currentRoomId = this.state.room ? this.state.room.roomId : '';
         let homeserver = this.client.getHomeserverUrl();
+        
+        // Sign-in prompt
+        let isGuest = !this.props.accessToken || !this.props.userId;
+        let siPrompt = false;
+        if (this.props.signInPrompt === 'all') {
+            // Show for everyone
+            siPrompt = true;
+        } else if (this.props.signInPrompt === 'guests' && isGuest) {
+            // Show for guests and currently signed in as guest
+            siPrompt = true;
+        }
 
         return (
             <ThemeContext.Provider value={{theme: this.state.theme, highlight: this.state.highlight}}>
                 <div className={`client bg-primary-${this.state.theme}`}>
-                    <Modal visible={true} title='Sign in'>
+                    <Modal visible={siPrompt} title='Sign in'>
                         <SignInForm client={this.client} setUser={this.setUser} />
                     </Modal>
 
