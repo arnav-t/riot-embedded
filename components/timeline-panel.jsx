@@ -11,6 +11,7 @@ import ThemeContext from './theme-context.jsx';
  * @param   {object} client - The client object
  * @param   {array} children - Children of room timeline
  * @param   {func} replyTo - Callback for setting reply 
+ * @param   {boolean} showTools - If event toolbar should be shown
  */
 export default class TimelinePanel extends PureComponent {
     static propTypes = {
@@ -18,7 +19,8 @@ export default class TimelinePanel extends PureComponent {
         room: PropTypes.object, // Room object
         client: PropTypes.object, // Client object
         children: PropTypes.array, // Children of the room body
-        replyTo: PropTypes.func // Callback for setting reply
+        replyTo: PropTypes.func, // Callback for setting reply
+        showTools: PropTypes.bool // If event toolbar should be shown
     };
 
     constructor(props) {
@@ -77,18 +79,17 @@ export default class TimelinePanel extends PureComponent {
 
             let timelineList = document.getElementById('timeline-list');
             let newHeight = timelineList.clientHeight;
-
-            // Only if not already at the top of timeline
-            if (newHeight !== oldHeight) {
-                let timelineBody = document.getElementById('timeline-body');
-                
-                // Scroll to original position (position += diff in height)
-                timelineBody.scrollTop += timelineList.clientHeight - oldHeight;
-                
-                // If scrolled to top or not fully scrolled to top
-                if (timelineBody.scrollTop <= 0) {
-                    this.loadPrevious(newHeight);
-                }
+            let timelineBody = document.getElementById('timeline-body');
+            
+            // Scroll to original position (position += diff in height)
+            let change = newHeight - oldHeight;
+            timelineBody.scrollTop += change;
+            
+            // If scrolled to top or not fully scrolled to top or
+            // if change in height is less than threshold (300)
+            if (timelineBody.scrollTop <= 0 || 
+                change < 300) {
+                this.loadPrevious(newHeight);
             }
         });
     }
@@ -121,7 +122,8 @@ export default class TimelinePanel extends PureComponent {
                     <EventTile key={event.event.event_id} 
                         homeserver={this.props.homeserver}
                         mxEvent={event} client={this.props.client}
-                        replyTo={this.props.replyTo} />
+                        replyTo={this.props.replyTo} 
+                        showTools={this.props.showTools} />
                 ); 
             }
         }

@@ -32,4 +32,36 @@ export let config = {
     accessToken: '<DEFAULT ACCESS TOKEN>'
 };
 ```
-Leave out `userId` and `accessToken` to attempt registration as guest.
+Leave out `userId` and `accessToken` to attempt registration as guest.   
+#### Complete list of options:
+*  `baseUrl` (*string*) - Base URL of homeserver - **Required**
+*  `roomId` (*string*) - The internal ID of default room - **Required** 
+*  `userId` (*string*) - The ID of default user            
+    Ignore to register as guest
+*  `accessToken` (*string*) - Access token of default user     
+    Ignore to register as guest
+*  `readOnly` (*boolean*) - If the client is in read-only mode    
+    - `true`
+    - `false` (default)        
+    Disables `msgComposer` and `roomsList` (unless overriden)
+*  `theme` (*string*) - Theme of the client
+    - `'dark'` - Dark theme (default)
+    - `'light'` - Light theme
+*  `highlight` (*string*) - Highlight color  
+    - `'pink'` - Pink highlights (default)  
+    - `'green'` - Green highlights
+*  `roomHeader` (*boolean*) - If room header should be displayed        
+    - `true` (default)
+    - `false`          
+*  `roomsList` (*boolean*) - If rooms list should be displayed (overrides `readOnly`)      
+    - `true` (default)
+    - `false`          
+*  `msgComposer` (*boolean*) - If message composer should be displayed (overrides `readOnly`)          
+    - `true` (default)
+    - `false`          
+*  `whitelist` (*Array*) - Whitelisted origins         
+    Ignore to allow all origins
+*  `signInPrompt` (*string*) - Show sign in prompts    
+    - `'none'` - Never show (default)
+    - `'guests'` - Show if signed in as guest
+    - `'all'` - Always show

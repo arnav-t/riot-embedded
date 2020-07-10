@@ -6,7 +6,7 @@ import EventEmitter from 'events';
  * @param   {Array} origins - List of whitelisted origin domains
  */
 export default class MessageHandler extends EventEmitter{
-    constructor(origins=['null']) {
+    constructor(origins) {
         super();
         this.origins = origins;
 
@@ -26,8 +26,8 @@ export default class MessageHandler extends EventEmitter{
             origin = event.originalEvent.origin;
         }
 
-        // If origin is in whitelist
-        if ( this.origins.includes(origin) ) {
+        // If origin is in whitelist or if whitelist is undefined
+        if ( this.origins === undefined || this.origins.includes(origin) ) {
             let data = event.data;
 
             // Parse data

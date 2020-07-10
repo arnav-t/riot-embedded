@@ -12,13 +12,15 @@ import Sanitizer from '../classes/sanitizer.js';
  * @param   {object} mxEvent - The event object
  * @param   {object} client - The matrix client object
  * @param   {func} replyTo - Callback for setting reply
+ * @param   {boolean} showTools - If event toolbar should be shown
  */
 export default class EventTile extends PureComponent {
     static propTypes = {
         homeserver: PropTypes.string.isRequired, // Homeserver URL
         mxEvent: PropTypes.object.isRequired, // Event object
         client: PropTypes.object.isRequired, // Client object
-        replyTo: PropTypes.func.isRequired // Callback for setting reply
+        replyTo: PropTypes.func.isRequired, // Callback for setting reply
+        showTools: PropTypes.bool.isRequired // If event toolbar should be shown
     };
 
     // Consume theme context
@@ -59,7 +61,7 @@ export default class EventTile extends PureComponent {
             <li>
                 <div className={`list-panel-item msg-body-${theme.theme}`}>
                     <Avatar imgUrl={avatarUrl} size={32} name={userId} />
-                    <MessageToolbar mxEvent={this.props.mxEvent} replyTo={this.props.replyTo} />
+                    {this.props.showTools && <MessageToolbar mxEvent={this.props.mxEvent} replyTo={this.props.replyTo} />}
                     <div className='msg-data'>
                         <h4>{name} <i className='text-muted'>{userId}</i></h4>
                         <p>
