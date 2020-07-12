@@ -81,6 +81,7 @@ export default class Client extends Component{
         if (!props.accessToken || !props.userId) {
             // If any accessToken or userId is absent
             // Register as guest
+            this.isGuest = true;
 
             this.client = this.sdk.createClient({
                 baseUrl: props.baseUrl
@@ -111,6 +112,8 @@ export default class Client extends Component{
                 }
             });
         } else {
+            this.isGuest = false;
+
             this.client = this.sdk.createClient({
                 baseUrl: props.baseUrl,
                 accessToken: props.accessToken,
@@ -170,6 +173,8 @@ export default class Client extends Component{
 
     /** Reinitialize client after login */
     setUser(userId, accessToken, callback=null) {
+        this.isGuest = false;
+
         this.client = this.sdk.createClient({
             baseUrl: this.props.baseUrl,
             accessToken: accessToken,
@@ -242,12 +247,11 @@ export default class Client extends Component{
         let homeserver = this.client.getHomeserverUrl();
         
         // Sign-in prompt
-        let isGuest = !this.props.accessToken || !this.props.userId;
         let siPrompt = false;
         if (this.props.signInPrompt === 'all') {
             // Show for everyone
             siPrompt = true;
-        } else if (this.props.signInPrompt === 'guests' && isGuest) {
+        } else if (this.props.signInPrompt === 'guests' && this.isGuest) {
             // Show for guests and currently signed in as guest
             siPrompt = true;
         }
@@ -266,9 +270,9 @@ export default class Client extends Component{
                         {this.state.roomsList && (<RoomsList list={this.client.getRooms()} 
                             currentRoomId={currentRoomId}
                             onClick={this.onSelectRoom} />)}
-                        <TimelinePanel homeserver={homeserver}
-                            room={this.state.room} client={this.client}
-                            replyTo={this.replyTo} showTools={this.state.msgComposer} > 
+                        <TimelinePanel homeserver={homeserver} room={this.state.room} 
+                            client={this.client} replyTo={this.replyTo} 
+                            showTools={this.state.msgComposer} isGuest={this.isGuest} > 
                             {this.state.reply && this.state.msgComposer ? 
                                 <ReplyPopup homeserver={homeserver} 
                                     mxEvent={this.state.reply} client={this.client} 

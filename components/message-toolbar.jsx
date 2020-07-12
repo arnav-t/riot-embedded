@@ -3,17 +3,22 @@ import PropTypes from 'prop-types';
 import ThemeContext from './theme-context.jsx';
 import Reply from '../res/reply.svg';
 import Quote from '../res/quote.svg';
+import Delete from '../res/delete.svg';
 
 /**
  * React component for message toolbar
  * 
  * @param   {object} mxEvent - The event object
  * @param   {func} replyTo - Callback for setting reply
+ * @param   {func} delete - Callback for deleting current event
+ * @param   {bool} canDelete - If current user can delete this event
  */
 export default class MessageToolbar extends PureComponent {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired, // Event object
-        replyTo: PropTypes.func.isRequired // Callback for setting reply
+        replyTo: PropTypes.func.isRequired, // Callback for setting reply
+        delete: PropTypes.func.isRequired, // Callback for deleting current event
+        canDelete: PropTypes.bool.isRequired // If current user can delete event
     };
 
     constructor(props) {
@@ -53,16 +58,21 @@ export default class MessageToolbar extends PureComponent {
 
         return (
             <div className='msg-toolbar'>
-                <div className={`msg-tool-${theme.theme}`}>
+                <div className={`msg-tool-${theme.theme}`} title='Reply'>
                     <Reply height={20} 
                         className={`ico-${theme.theme}`}
                         onClick={this.reply} />
                 </div>
-                <div className={`msg-tool-${theme.theme}`}>
+                <div className={`msg-tool-${theme.theme}`} title='Quote'>
                     <Quote height={20} 
                         className={`ico-${theme.theme}`} 
                         onClick={this.quote} />
                 </div>
+                {this.props.canDelete && <div className={`msg-tool-${theme.theme}`} title='Delete'>
+                    <Delete height={20} 
+                        className={`ico-${theme.theme}`}
+                        onClick={this.props.delete} />
+                </div>}
             </div>
         );
     }

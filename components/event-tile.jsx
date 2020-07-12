@@ -13,6 +13,7 @@ import Sanitizer from '../classes/sanitizer.js';
  * @param   {object} client - The matrix client object
  * @param   {func} replyTo - Callback for setting reply
  * @param   {boolean} showTools - If event toolbar should be shown
+ * @param   {boolean} isGuest - If client is in guest mode
  */
 export default class EventTile extends PureComponent {
     static propTypes = {
@@ -20,8 +21,25 @@ export default class EventTile extends PureComponent {
         mxEvent: PropTypes.object.isRequired, // Event object
         client: PropTypes.object.isRequired, // Client object
         replyTo: PropTypes.func.isRequired, // Callback for setting reply
-        showTools: PropTypes.bool.isRequired // If event toolbar should be shown
+        showTools: PropTypes.bool.isRequired, // If event toolbar should be shown
+        isGuest: PropTypes.bool // If client is in guest mode
     };
+
+    constructor(props) {
+        super(props);
+
+        this.delete = this.delete.bind(this);
+    }
+
+    /** Delete this event */
+    delete() {
+        const roomId = this.props.mxEvent.getRoomId();
+        const eventId = this.props.mxEvent.event.event_id;
+        this.props.client.redactEvent(roomId, eventId, (err, data) => {
+            if (err) console.log(err);
+            console.log(data);
+        });
+    }
 
     // Consume theme context
     static contextType = ThemeContext;
@@ -34,6 +52,10 @@ export default class EventTile extends PureComponent {
         let {name, userId} = sender;
         let fmtBody = this.props.mxEvent.event.content.formatted_body;
         let mxBody;
+
+        // If deleting is possible by current user
+        let canDelete = this.props.client.getUserId() == userId &&
+            !this.props.isGuest;
 
         if (this.props.mxEvent.event.content.msgtype === 'm.image') {
             // Load images
@@ -61,7 +83,11 @@ export default class EventTile extends PureComponent {
             <li>
                 <div className={`list-panel-item msg-body-${theme.theme}`}>
                     <Avatar imgUrl={avatarUrl} size={32} name={userId} />
-                    {this.props.showTools && <MessageToolbar mxEvent={this.props.mxEvent} replyTo={this.props.replyTo} />}
+                    {this.props.showTools && <MessageToolbar 
+                        mxEvent={this.props.mxEvent} 
+                        replyTo={this.props.replyTo} 
+                        delete={this.delete}
+                        canDelete={canDelete} />}
                     <div className='msg-data'>
                         <h4>{name} <i className='text-muted'>{userId}</i></h4>
                         <p>
