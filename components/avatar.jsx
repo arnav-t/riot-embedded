@@ -56,7 +56,14 @@ export default class Avatar extends PureComponent {
             </div>
         );
         return (
-            <img src={imgUrl} height={this.props.size} width={this.props.size} className='rounded-img' />
+            <img src={imgUrl} 
+                height={this.props.size} 
+                width={this.props.size} 
+                className='rounded-img'
+                style={{
+                    minHeight: this.props.size,
+                    minWidth: this.props.size,
+                }} />
         );
     }
 }
