@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, createRef} from 'react';
 import PropTypes from 'prop-types';
 import RoomsList from './rooms-list';
 import TimelinePanel from './timeline-panel.jsx';
@@ -9,6 +9,7 @@ import Modal from './modal';
 import SignInForm from './sign-in-form';
 import ReplyPopup from './reply-popup';
 import MessageHandler from '../classes/message-handler.js';
+import Avatar from './avatar';
 
 /** 
  * React component for the client 
@@ -70,6 +71,7 @@ export default class Client extends Component{
         this.toggleMsgComposer = this.toggleMsgComposer.bind(this);
         this.login = this.login.bind(this);
         this.replyTo = this.replyTo.bind(this);
+        this.showReceipts = this.showReceipts.bind(this);
 
         // Consume events from MessageHandler
         this.messageHandler.on('setTheme', this.setTheme);
@@ -77,6 +79,9 @@ export default class Client extends Component{
         this.messageHandler.on('roomsList', this.toggleRoomsList);
         this.messageHandler.on('msgComposer', this.toggleMsgComposer);
         this.messageHandler.on('login', this.login);
+
+        // Refs
+        this.receiptsModal = createRef();
 
         if (!props.accessToken || !props.userId) {
             // If any accessToken or userId is absent
@@ -239,6 +244,47 @@ export default class Client extends Component{
         });
     }
 
+    /** Show read receipts for event */
+    showReceipts(event) {
+        // Construct read receipts for event from latest to current
+        let receipts = [];
+        let timeline = this.state.room.timeline;
+        for (let i=timeline.length-1; i>=0; i--) {
+            let evt = timeline[i];
+            receipts.push(
+                ...this.state.room.getReceiptsForEvent(evt)
+            );
+            if (event.getId() === evt.getId()) break;
+        }
+
+        // Sort in alphabetical order on userId
+        // Can't sort on time as receipts are not available
+        // for previous messages (hence no timestamp)
+        receipts.sort((a,b) => a.userId.localeCompare(b.userId));
+        
+        // Generate JSX for list
+        this.list = [];
+        for (let receipt of receipts) {
+            const userId = receipt.userId;
+            let user = this.client.getUser(userId);
+            let avatarUrl = user.avatarUrl;
+            if (avatarUrl) {
+                avatarUrl = this.client.mxcUrlToHttp(avatarUrl, 32, 32);
+            }
+            this.list.push(
+                <li className='user-list-item'
+                    key={user.userId}>
+                    <Avatar imgUrl={avatarUrl} size={32} name={user.userId} />
+                    <h4>{user.displayName} <i className='text-muted'>{user.userId}</i></h4>
+                </li>
+            );
+        }
+
+        // Show modal
+        this.receiptsModal.current.open();
+        this.forceUpdate();
+    }
+
     render() {
         if (!this.client) return <></>;
 
@@ -262,6 +308,14 @@ export default class Client extends Component{
                     <Modal visible={siPrompt} title='Sign in'>
                         <SignInForm client={this.client} setUser={this.setUser} />
                     </Modal>
+                    
+                    <Modal visible={false} title='Read by' ref={this.receiptsModal}>
+                        <div className={`user-panel scrollable-${this.state.theme}`}>
+                            <ul className='user-list'>
+                                {this.list}
+                            </ul>
+                        </div>
+                    </Modal>
 
                     {this.state.roomHeader && (<RoomHeader homeserver={homeserver}
                         room={this.state.room} />)}              
@@ -272,7 +326,8 @@ export default class Client extends Component{
                             onClick={this.onSelectRoom} />)}
                         <TimelinePanel homeserver={homeserver} room={this.state.room} 
                             client={this.client} replyTo={this.replyTo} 
-                            showTools={this.state.msgComposer} isGuest={this.isGuest} > 
+                            canWrite={this.state.msgComposer} isGuest={this.isGuest}
+                            showReceipts={this.showReceipts} > 
                             {this.state.reply && this.state.msgComposer ? 
                                 <ReplyPopup homeserver={homeserver} 
                                     mxEvent={this.state.reply} client={this.client} 

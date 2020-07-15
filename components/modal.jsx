@@ -31,6 +31,12 @@ export default class Modal extends PureComponent {
         });
     }
 
+    open() {
+        this.setState({
+            visible: true
+        });
+    }
+
     // Consume theme context
     static contextType = ThemeContext;
     render() {

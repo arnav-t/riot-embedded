@@ -12,8 +12,9 @@ import Sanitizer from '../classes/sanitizer.js';
  * @param   {object} mxEvent - The event object
  * @param   {object} client - The matrix client object
  * @param   {func} replyTo - Callback for setting reply
- * @param   {boolean} showTools - If event toolbar should be shown
+ * @param   {boolean} canWrite - If client can send messages
  * @param   {boolean} isGuest - If client is in guest mode
+ * @param   {func} showReceipts - Callback to show read receipts
  */
 export default class EventTile extends PureComponent {
     static propTypes = {
@@ -21,8 +22,9 @@ export default class EventTile extends PureComponent {
         mxEvent: PropTypes.object.isRequired, // Event object
         client: PropTypes.object.isRequired, // Client object
         replyTo: PropTypes.func.isRequired, // Callback for setting reply
-        showTools: PropTypes.bool.isRequired, // If event toolbar should be shown
-        isGuest: PropTypes.bool // If client is in guest mode
+        canWrite: PropTypes.bool.isRequired, // If client can send messages
+        isGuest: PropTypes.bool.isRequired, // If client is in guest mode
+        showReceipts: PropTypes.func.isRequired // Callback to show read receipts
     };
 
     constructor(props) {
@@ -83,11 +85,13 @@ export default class EventTile extends PureComponent {
             <li>
                 <div className={`list-panel-item msg-body-${theme.theme}`}>
                     <Avatar imgUrl={avatarUrl} size={32} name={userId} />
-                    {this.props.showTools && <MessageToolbar 
+                    <MessageToolbar 
                         mxEvent={this.props.mxEvent} 
                         replyTo={this.props.replyTo} 
                         delete={this.delete}
-                        canDelete={canDelete} />}
+                        canDelete={canDelete}
+                        canWrite={this.props.canWrite}
+                        showReceipts={this.props.showReceipts} />
                     <div className='msg-data'>
                         <h4>{name} <i className='text-muted'>{userId}</i></h4>
                         <p>

@@ -147,11 +147,13 @@ body {
 }
 
 .modal-content {
+    position: relative;
     background-color: white;
     box-shadow: 0 0 10px $color-dark-shadow;
     width: fit-content;
     min-width: 200px;
     min-height: 50px;
+    max-height: 80%;
 }
 
 .modal-topbar {
@@ -344,6 +346,25 @@ blockquote {
     margin: 0;
     padding-left: 15px;
     border-left: 3px solid grey;
+}
+
+.user-list {
+    display: flex;
+    flex-flow: column nowrap;
+    max-height: 100%;
+    padding-left: 0px;
+    padding-right: 10px;
+}
+
+.user-list-item {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.user-panel {
+    max-height: calc(80% - 50px);
+    max-height: calc(80vh - 50px);
 }
 
 /* ||| Scrollbar */
