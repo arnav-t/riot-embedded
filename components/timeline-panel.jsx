@@ -11,8 +11,9 @@ import ThemeContext from './theme-context.jsx';
  * @param   {object} client - The client object
  * @param   {array} children - Children of room timeline
  * @param   {func} replyTo - Callback for setting reply 
- * @param   {boolean} showTools - If event toolbar should be shown
+ * @param   {boolean} canWrite - If client can send messages
  * @param   {boolean} isGuest - If client is in guest mode
+ * @param   {func} showReceipts - Callback to show read receipts
  */
 export default class TimelinePanel extends PureComponent {
     static propTypes = {
@@ -21,8 +22,9 @@ export default class TimelinePanel extends PureComponent {
         client: PropTypes.object, // Client object
         children: PropTypes.array, // Children of the room body
         replyTo: PropTypes.func, // Callback for setting reply
-        showTools: PropTypes.bool, // If event toolbar should be shown
-        isGuest: PropTypes.bool // If client is in guest mode
+        canWrite: PropTypes.bool, // If client can send messages
+        isGuest: PropTypes.bool, // If client is in guest mode
+        showReceipts: PropTypes.func // Callback to show read receipts
     };
 
     constructor(props) {
@@ -125,8 +127,9 @@ export default class TimelinePanel extends PureComponent {
                         homeserver={this.props.homeserver}
                         mxEvent={event} client={this.props.client}
                         replyTo={this.props.replyTo} 
-                        showTools={this.props.showTools}
-                        isGuest={this.props.isGuest} />
+                        canWrite={this.props.canWrite}
+                        isGuest={this.props.isGuest}
+                        showReceipts={this.props.showReceipts} />
                 ); 
             }
         }
