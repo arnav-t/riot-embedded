@@ -4,6 +4,7 @@ import Avatar from './avatar.jsx';
 import MessageToolbar from './message-toolbar.jsx';
 import ThemeContext from './theme-context.jsx';
 import Sanitizer from '../classes/sanitizer.js';
+import linkifyHtml from 'linkifyjs/html';
 
 /**
  * React component for an event in the room timeline
@@ -84,6 +85,10 @@ export default class EventTile extends PureComponent {
             // Load text only messages
             if (fmtBody) {
                 let saneHtml = new Sanitizer(fmtBody).sanitize();
+                saneHtml = linkifyHtml(saneHtml, {
+                    defaultProtocol: 'https',
+                    ignoreTags: ['a', 'blockquote']
+                });
                 mxBody = (
                     <span dangerouslySetInnerHTML={{ __html: saneHtml }} />
                 );
