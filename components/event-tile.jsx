@@ -62,9 +62,18 @@ export default class EventTile extends PureComponent {
         if (this.props.mxEvent.event.content.msgtype === 'm.image') {
             // Load images
             let content = this.props.mxEvent.event.content;
-            let img_url = this.props.client.mxcUrlToHttp(
-                content.info.thumbnail_url
-            );
+            let img_url;
+            if (content.info && content.info.thumbnail_url) {
+                // Usual format
+                img_url = this.props.client.mxcUrlToHttp(
+                    content.info.thumbnail_url
+                );
+            } else {
+                // GIFs
+                img_url = this.props.client.mxcUrlToHttp(
+                    content.url
+                );
+            }
             mxBody = (
                 // eslint-disable-next-line react/jsx-no-target-blank
                 <a href={img_url} target='_blank'>
