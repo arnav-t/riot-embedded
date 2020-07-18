@@ -348,6 +348,21 @@ blockquote {
     border-left: 3px solid grey;
 }
 
+a {
+    color: #238cf5;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a:hover, a:active {
+    text-decoration: underline;
+}
+
+a:visited {
+    text-decoration: none;
+    color: #238cf5;
+}
+
 .user-list {
     display: flex;
     flex-flow: column nowrap;

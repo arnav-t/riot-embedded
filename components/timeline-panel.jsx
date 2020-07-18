@@ -53,7 +53,14 @@ export default class TimelinePanel extends PureComponent {
             this.attachedToBottom = true;
             let height = timelineBody.clientHeight;
             timelineBody.scrollTop += height + 999999;
-            this.oldRoomId = this.props.room.roomId;   
+            this.oldRoomId = this.props.room.roomId;
+
+            // Send read receipt
+            if (this.props.room.timeline.lengh > 0) {
+                const timelineLength = this.props.room.timeline.lengh;
+                let lastEvent = this.props.room.timeline[timelineLength - 1];
+                this.props.client.sendReadReceipt(lastEvent, {hidden: false});
+            }
         }
 
         // Load messages if timeline not filled
