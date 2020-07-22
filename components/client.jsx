@@ -85,6 +85,9 @@ export default class Client extends Component{
         // Refs
         this.receiptsModal = createRef();
 
+        // // Interval
+        // setInterval(this.checkConnectivity, 5000);
+
         if (!props.accessToken || !props.userId) {
             // If any accessToken or userId is absent
             // Register as guest
@@ -164,6 +167,17 @@ export default class Client extends Component{
                 // Add listeners
                 this.client.on('Room.timeline', this._onRoomTimeline);
                 this.client.on('sync', this.checkConnectivity);
+                window.addEventListener('online', () => {
+                    // Force SDK to recheck
+                    this.client.retryImmediately();
+                });
+                window.addEventListener('offline', () => {
+                    // Manually show error
+                    this.setState({
+                        connectionError: true
+                    });
+                    this.client.retryImmediately();
+                });
             }
         });
     }
@@ -290,6 +304,18 @@ export default class Client extends Component{
 
     /** Check connection and show/hide error */
     checkConnectivity() {
+        // this.client.turnServer()
+        //     .then(() => {
+        //         this.setState({
+        //             connectionError: false
+        //         });
+        //     })
+        //     .catch(() => {
+        //         this.setState({
+        //             connectionError: true
+        //         });
+        //     });
+
         // Fetch state from client
         const syncState = this.client.getSyncState();
         const syncStateData = this.client.getSyncStateData();
@@ -301,8 +327,6 @@ export default class Client extends Component{
             syncStateData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED',
         );
         const connErr = Boolean(syncState === 'ERROR' && !errorIsMauError);
-
-        console.log('sync', connErr, errorIsMauError, syncState, syncStateData);
 
         // Show or hide error
         this.setState({
