@@ -55,6 +55,7 @@ export default class Client extends Component{
             msgComposer: props.msgComposer !== undefined ? props.msgComposer : 
                 props.readOnly !== undefined ? !props.readOnly : true,  // If message composer should be displayed
             reply: null,    // Event to reply to
+            connectionError: false  // Display connection error message
         };
         this.sdk = require('matrix-js-sdk');
 
@@ -72,6 +73,7 @@ export default class Client extends Component{
         this.login = this.login.bind(this);
         this.replyTo = this.replyTo.bind(this);
         this.showReceipts = this.showReceipts.bind(this);
+        this.checkConnectivity = this.checkConnectivity.bind(this);
 
         // Consume events from MessageHandler
         this.messageHandler.on('setTheme', this.setTheme);
@@ -82,6 +84,9 @@ export default class Client extends Component{
 
         // Refs
         this.receiptsModal = createRef();
+
+        // // Interval
+        // setInterval(this.checkConnectivity, 5000);
 
         if (!props.accessToken || !props.userId) {
             // If any accessToken or userId is absent
@@ -161,6 +166,18 @@ export default class Client extends Component{
 
                 // Add listeners
                 this.client.on('Room.timeline', this._onRoomTimeline);
+                this.client.on('sync', this.checkConnectivity);
+                window.addEventListener('online', () => {
+                    // Force SDK to recheck
+                    this.client.retryImmediately();
+                });
+                window.addEventListener('offline', () => {
+                    // Manually show error
+                    this.setState({
+                        connectionError: true
+                    });
+                    this.client.retryImmediately();
+                });
             }
         });
     }
@@ -285,6 +302,38 @@ export default class Client extends Component{
         this.forceUpdate();
     }
 
+    /** Check connection and show/hide error */
+    checkConnectivity() {
+        // this.client.turnServer()
+        //     .then(() => {
+        //         this.setState({
+        //             connectionError: false
+        //         });
+        //     })
+        //     .catch(() => {
+        //         this.setState({
+        //             connectionError: true
+        //         });
+        //     });
+
+        // Fetch state from client
+        const syncState = this.client.getSyncState();
+        const syncStateData = this.client.getSyncStateData();
+
+        // Logic copied from RoomStatusBar in matrix-react-sdk
+        const errorIsMauError = Boolean(
+            syncStateData &&
+            syncStateData.error &&
+            syncStateData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED',
+        );
+        const connErr = Boolean(syncState === 'ERROR' && !errorIsMauError);
+
+        // Show or hide error
+        this.setState({
+            connectionError: connErr
+        });
+    }
+
     render() {
         if (!this.client) return <></>;
 
@@ -318,7 +367,11 @@ export default class Client extends Component{
                     </Modal>
 
                     {this.state.roomHeader && (<RoomHeader homeserver={homeserver}
-                        room={this.state.room} />)}              
+                        room={this.state.room} />)}
+
+                    {this.state.connectionError && <div className='room-status-bar'>
+                        <b>Lost connection to the server.</b>
+                    </div>}       
                     
                     <div className={`client-body bg-primary-${this.state.theme}`}>
                         {this.state.roomsList && (<RoomsList list={this.client.getRooms()} 

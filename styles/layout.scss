@@ -40,6 +40,22 @@ body {
     padding-left: 100px;
 }
 
+.room-status-bar {
+    position: absolute;
+    left: 0px;
+    top: 50px;
+    width: 100%;
+    display: flex;
+    z-index: 998;
+    background-color: rgba(10, 0, 0, 0.9);
+    color: red;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 2px $color-dark-shadow;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
 .client-body {
     overflow: hidden;
     flex-grow: 1;
@@ -144,6 +160,8 @@ body {
     align-items: center;
     justify-content: center;
     background-color: rgba(0,0,0,0.7);
+    backdrop-filter: blur(20px);
+
 }
 
 .modal-content {
