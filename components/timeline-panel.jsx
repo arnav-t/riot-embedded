@@ -14,6 +14,7 @@ import ThemeContext from './theme-context.jsx';
  * @param   {boolean} canWrite - If client can send messages
  * @param   {boolean} isGuest - If client is in guest mode
  * @param   {func} showReceipts - Callback to show read receipts
+ * @param   {string} typingText - Prompt about currently typing users
  */
 export default class TimelinePanel extends PureComponent {
     static propTypes = {
@@ -24,7 +25,8 @@ export default class TimelinePanel extends PureComponent {
         replyTo: PropTypes.func, // Callback for setting reply
         canWrite: PropTypes.bool, // If client can send messages
         isGuest: PropTypes.bool, // If client is in guest mode
-        showReceipts: PropTypes.func // Callback to show read receipts
+        showReceipts: PropTypes.func, // Callback to show read receipts
+        typingText: PropTypes.string // Prompt about currently typing users
     };
 
     constructor(props) {
@@ -151,6 +153,9 @@ export default class TimelinePanel extends PureComponent {
                     </div>
                     <ul className='list-panel' id='timeline-list' >
                         {timeline}
+                        <div className='typing-panel'>
+                            <i>{this.props.typingText}</i>
+                        </div>
                     </ul>
                 </div>
                 {this.props.children}
