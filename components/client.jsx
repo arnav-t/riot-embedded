@@ -55,7 +55,8 @@ export default class Client extends Component{
             msgComposer: props.msgComposer !== undefined ? props.msgComposer : 
                 props.readOnly !== undefined ? !props.readOnly : true,  // If message composer should be displayed
             reply: null,    // Event to reply to
-            connectionError: false  // Display connection error message
+            connectionError: false,  // Display connection error message
+            currentlyTyping: new Set() //  People currently typing in the room
         };
         this.sdk = require('matrix-js-sdk');
 
@@ -84,9 +85,6 @@ export default class Client extends Component{
 
         // Refs
         this.receiptsModal = createRef();
-
-        // // Interval
-        // setInterval(this.checkConnectivity, 5000);
 
         if (!props.accessToken || !props.userId) {
             // If any accessToken or userId is absent
@@ -178,6 +176,32 @@ export default class Client extends Component{
                     });
                     this.client.retryImmediately();
                 });
+                this.client.on('RoomMember.typing', (_, member) => {
+                    // Add or remove member from currently typing members
+                    let roomId = member.roomId;
+                    let username = member.name;
+                    let typing = member.typing;
+                    if (roomId === (this.state.room ? this.state.room.roomId : null)) {
+                        // If event is in current room
+                        let currentlyTyping = this.state.currentlyTyping;
+                        if (typing) {
+                            // Add to list
+                            if (!currentlyTyping.has(username)) {
+                                currentlyTyping.add(username);
+                                this.setState({
+                                    currentlyTyping: currentlyTyping
+                                });
+                            }
+                        } else {
+                            // Remove from list
+                            if (currentlyTyping.delete(username)) {
+                                this.setState({
+                                    currentlyTyping: currentlyTyping
+                                });
+                            }
+                        }
+                    }
+                });
             }
         });
     }
@@ -189,7 +213,8 @@ export default class Client extends Component{
         
         let roomId = e.currentTarget.getAttribute('id');
         this.setState({
-            room: this.client.getRoom(roomId)
+            room: this.client.getRoom(roomId),
+            currentlyTyping: new Set()
         });
     }
 
@@ -200,7 +225,8 @@ export default class Client extends Component{
         this.client = this.sdk.createClient({
             baseUrl: this.props.baseUrl,
             accessToken: accessToken,
-            userId: userId
+            userId: userId,
+            currentlyTyping: new Set()
         });
 
         // Unset reply
@@ -351,6 +377,20 @@ export default class Client extends Component{
             siPrompt = true;
         }
 
+        // Generate typing text
+        let typingText = '';
+        let setSize = this.state.currentlyTyping.size;
+        if (setSize > 0 && setSize <= 3) {
+            // Display names of currently typing users
+            const verb = setSize == 1 ? 'is' : 'are';
+            typingText = 
+                `${Array.from(this.state.currentlyTyping).join(', ')} ${verb} typing...`;
+
+        } else if (setSize > 3) {
+            // Display number of currently typing users
+            typingText = `${setSize} users are typing...`;
+        }
+
         return (
             <ThemeContext.Provider value={{theme: this.state.theme, highlight: this.state.highlight}}>
                 <div className={`client bg-primary-${this.state.theme}`}>
@@ -380,7 +420,7 @@ export default class Client extends Component{
                         <TimelinePanel homeserver={homeserver} room={this.state.room} 
                             client={this.client} replyTo={this.replyTo} 
                             canWrite={this.state.msgComposer} isGuest={this.isGuest}
-                            showReceipts={this.showReceipts} > 
+                            showReceipts={this.showReceipts} typingText={typingText} >
                             {this.state.reply && this.state.msgComposer ? 
                                 <ReplyPopup homeserver={homeserver} 
                                     mxEvent={this.state.reply} client={this.client} 

@@ -97,6 +97,7 @@ body {
     height: fit-content;
     padding-left: 0;
     padding-right: 0;
+    margin-bottom: 5px;
     display: flex;
     flex-flow: column nowrap;
     align-items: stretch;
@@ -105,6 +106,14 @@ body {
 
 .list-panel-item {
     padding: 5px;
+}
+
+.typing-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 19px;
+    animation: pulse 1s infinite;
 }
 
 .composer-panel {
@@ -430,5 +439,19 @@ a:visited {
     }
     100% { 
         transform: rotate(360deg); 
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+    }
+
+    70% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0.95);
     }
 }
