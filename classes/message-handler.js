@@ -138,6 +138,22 @@ export default class MessageHandler extends EventEmitter{
             }, '*');
             break;
 
+        case 'switchRoom':
+            // Switch to this room
+            if (typeof args !== 'string') {
+                parent.postMessage({
+                    'status' : 'error',
+                    'message' : 'Invalid or missing arguments.'
+                }, '*');
+                return;
+            }
+            this.emit('switchRoom', args);
+            parent.postMessage({
+                'status' : 'success',
+                'message' : 'Attempting to switch room...'
+            }, '*');
+            break;
+
         default:
             // No matching command
             parent.postMessage({
