@@ -168,6 +168,25 @@ iframe.contentWindow.postMessage({
     message: 'Toggled message composer.'
 }
 ```
+### Switch room
+```js
+iframe.contentWindow.postMessage({
+    cmd: 'switchRoom',
+    args: '!abcdef123456'
+}, origin);
+```
+*Arguments:*
+
+`args` (string) -  
+Internal room ID
+
+*Response:*
+```js
+{
+    status: 'success', 
+    message: 'Attempting to switch room...'
+}
+```
 ### Login with username and password
 ```js
 iframe.contentWindow.postMessage({

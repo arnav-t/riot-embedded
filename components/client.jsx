@@ -71,6 +71,7 @@ export default class Client extends Component{
         this.toggleRoomHeader = this.toggleRoomHeader.bind(this);
         this.toggleRoomsList = this.toggleRoomsList.bind(this);
         this.toggleMsgComposer = this.toggleMsgComposer.bind(this);
+        this.switchRoom = this.switchRoom.bind(this);
         this.login = this.login.bind(this);
         this.replyTo = this.replyTo.bind(this);
         this.showReceipts = this.showReceipts.bind(this);
@@ -81,6 +82,7 @@ export default class Client extends Component{
         this.messageHandler.on('roomHeader', this.toggleRoomHeader);
         this.messageHandler.on('roomsList', this.toggleRoomsList);
         this.messageHandler.on('msgComposer', this.toggleMsgComposer);
+        this.messageHandler.on('switchRoom', this.switchRoom);
         this.messageHandler.on('login', this.login);
 
         // Refs
@@ -268,6 +270,18 @@ export default class Client extends Component{
     toggleMsgComposer(args) {
         this.setState({
             msgComposer: args
+        });
+    }
+
+    /** Switch room */
+    switchRoom(args) {
+        if (typeof args != 'string' && !this.isGuest) return;
+        // Unset reply
+        this.replyTo();
+        
+        this.setState({
+            room: this.client.getRoom(args),
+            currentlyTyping: new Set()
         });
     }
 
