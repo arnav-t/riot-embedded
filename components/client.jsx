@@ -86,7 +86,9 @@ export default class Client extends Component{
         this.messageHandler.on('login', this.login);
 
         // Refs
+        this.signInModal = createRef();
         this.receiptsModal = createRef();
+        this.continueModal = createRef();
 
         if (!props.accessToken || !props.userId) {
             // If any accessToken or userId is absent
@@ -408,7 +410,7 @@ export default class Client extends Component{
         return (
             <ThemeContext.Provider value={{theme: this.state.theme, highlight: this.state.highlight}}>
                 <div className={`client bg-primary-${this.state.theme}`}>
-                    <Modal visible={siPrompt} title='Sign in'>
+                    <Modal visible={siPrompt} title='Sign in' ref={this.signInModal}>
                         <SignInForm client={this.client} setUser={this.setUser} />
                     </Modal>
                     
@@ -417,6 +419,16 @@ export default class Client extends Component{
                             <ul className='user-list'>
                                 {this.list}
                             </ul>
+                        </div>
+                    </Modal>
+
+                    <Modal visible={false} title='Sign in to continue' ref={this.continueModal}>
+                        <div className='form'>
+                            <b>Please sign in or register a guest account to send a message.</b>
+                            <div className='form-button-panel'>
+                                <button>Sign in</button>
+                                <button>Register as guest</button>
+                            </div>
                         </div>
                     </Modal>
 

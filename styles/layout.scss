@@ -217,6 +217,15 @@ body {
     margin: 0;
 }
 
+.form-button-panel {
+    width: 50%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 5px;
+}
+
 .error-msg {
     font-size: 14px;
     color: #f00;
