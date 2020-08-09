@@ -56,7 +56,8 @@ export default class Client extends Component{
                 props.readOnly !== undefined ? !props.readOnly : true,  // If message composer should be displayed
             reply: null,    // Event to reply to
             connectionError: false,  // Display connection error message
-            currentlyTyping: new Set() //  People currently typing in the room
+            currentlyTyping: new Set(), //  People currently typing in the room
+            readOnly: props.readOnly // If client is still read only
         };
         this.sdk = require('matrix-js-sdk');
 
@@ -91,7 +92,7 @@ export default class Client extends Component{
         this.continueModal = createRef();
 
         if (!props.accessToken || !props.userId) {
-            // If any accessToken or userId is absent
+            // If either accessToken or userId is absent
             // Register as guest
             this.isGuest = true;
 
@@ -235,6 +236,11 @@ export default class Client extends Component{
 
         // Unset reply
         this.replyTo();
+
+        // Set R/W
+        this.setState({
+            readOnly: false
+        });
         
         this.init(callback);
     }
@@ -426,8 +432,22 @@ export default class Client extends Component{
                         <div className='form'>
                             <b>Please sign in or register a guest account to send a message.</b>
                             <div className='form-button-panel'>
-                                <button>Sign in</button>
-                                <button>Register as guest</button>
+                                <button id='csiButton' onClick={() => {
+                                    // Open the sign in modal
+                                    this.continueModal.current.close();
+                                    this.signInModal.current.open();
+                                }}>Sign in</button>
+                                <button onClick={(event) => {
+                                    event.target.textContent = 'Joining...';
+                                    event.target.disabled = true;
+                                    document.querySelector('#csiButton').disabled = true;
+                                    this.client.joinRoom(this.state.room.roomId, {syncRoom: true}).then(() => {
+                                        this.continueModal.current.close();
+                                        this.setState({
+                                            readOnly: false
+                                        });
+                                    });
+                                }}>Register as guest</button>
                             </div>
                         </div>
                     </Modal>
@@ -454,7 +474,9 @@ export default class Client extends Component{
                                 <></>}
                             {this.state.msgComposer ? <MessageComposer client={this.client} 
                                 roomId={currentRoomId} mxEvent={this.state.reply} 
-                                unsetReply={this.replyTo} /> : <></>}
+                                unsetReply={this.replyTo} 
+                                openContinueModal={this.state.readOnly && this.continueModal.current ? 
+                                    this.continueModal.current.open : null} /> : <></>}
                             
                         </TimelinePanel>
                     </div>
