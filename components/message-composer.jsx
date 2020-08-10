@@ -11,13 +11,15 @@ import Sanitizer from '../classes/sanitizer.js';
  * @param   {MatrixClient} client - The client object
  * @param   {object} mxEvent - Event to reply to
  * @param   {func} unsetReply - Callback to unset reply
+ * @param   {func} openContinueModal - Callback to open continue dialog box
  */
 export default class MessageComposer extends PureComponent {
     static propTypes = {
         roomId: PropTypes.string.isRequired, // Current room ID
         client: PropTypes.object.isRequired, // Client object
         mxEvent: PropTypes.object, // Event to reply to
-        unsetReply: PropTypes.func.isRequired // Callback to unset reply
+        unsetReply: PropTypes.func.isRequired, // Callback to unset reply
+        openContinueModal: PropTypes.func // Callback to open continue dialog box
     };
 
     constructor(props) {
@@ -79,6 +81,11 @@ export default class MessageComposer extends PureComponent {
     sendMessage() {
         if (this.state.value.length <= 0) return;
 
+        if (this.props.openContinueModal) {
+            this.props.openContinueModal();
+            return;
+        }
+        
         this.setState({
             value: '',
             busy: true

@@ -23,6 +23,7 @@ export default class Modal extends PureComponent {
         };
 
         this.close = this.close.bind(this);
+        this.open = this.open.bind(this);
     }
 
     close() {
