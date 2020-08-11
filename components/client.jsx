@@ -77,6 +77,7 @@ export default class Client extends Component{
         this.replyTo = this.replyTo.bind(this);
         this.showReceipts = this.showReceipts.bind(this);
         this.checkConnectivity = this.checkConnectivity.bind(this);
+        this.joinRoomConsentSafe = this.joinRoomConsentSafe.bind(this);
 
         // Consume events from MessageHandler
         this.messageHandler.on('setTheme', this.setTheme);
@@ -90,6 +91,7 @@ export default class Client extends Component{
         this.signInModal = createRef();
         this.receiptsModal = createRef();
         this.continueModal = createRef();
+        this.consentModal = createRef();
 
         if (!props.accessToken || !props.userId) {
             // If either accessToken or userId is absent
@@ -119,7 +121,7 @@ export default class Client extends Component{
                         this.init();
                     });
                 } else {
-                    this.client.joinRoom(this.props.roomId, {syncRoom: true}).then(() => {
+                    this.joinRoomConsentSafe(this.props.roomId, () => {
                         this.init();
                     });
                 }
@@ -209,6 +211,22 @@ export default class Client extends Component{
                 });
             }
         });
+    }
+
+    /** Join room with consent */
+    joinRoomConsentSafe(roomId, callback=null) {
+        this.client.joinRoom(roomId, {syncRoom: true})
+            .then(callback)
+            .catch(e => {
+                if (e.errcode === 'M_CONSENT_NOT_GIVEN') {
+                    if (this.signInModal.current) this.signInModal.current.close();
+                    if (this.continueModal.current) this.continueModal.current.close();
+                    this.consentModal.current.open();
+                    document.querySelector('#consent-error').style.display = 'none';
+                    document.querySelector('#consent-link').href = e.data.consent_uri;
+                    this.consentCallback = callback;
+                } else console.log('Unhandled exception!', e);
+            });
     }
 
     /** Handle clicks from room list */
@@ -428,6 +446,35 @@ export default class Client extends Component{
                         </div>
                     </Modal>
 
+                    <Modal visible={false} title='Privacy Agreement' ref={this.consentModal}>
+                        <div className='form'>
+                            <h3>
+                                Please accept the <a id='consent-link' target='_blank' rel='noopener noreferrer'>privacy agreement</a> to continue.
+                            </h3>
+                            <i className='error-msg' id='consent-error'>You need to accept the agreement to continue.</i>
+                            <button onClick={(event) => {
+                                let button = event.target;
+                                button.textContent = '...';
+                                button.disabled = true;
+                                this.client.joinRoom(this.props.roomId, {syncRoom: true})
+                                    .then(() => {
+                                        button.textContent = 'Continue';
+                                        button.disabled = false;
+                                        this.consentModal.current.close();
+                                        this.setState({
+                                            readOnly: false
+                                        });
+                                        if (this.consentCallback) this.consentCallback();
+                                    })
+                                    .catch(() => {
+                                        button.textContent = 'Continue';
+                                        button.disabled = false;
+                                        document.querySelector('#consent-error').style.display = 'block';
+                                    });
+                            }}>Continue</button>
+                        </div>
+                    </Modal>
+
                     <Modal visible={false} title='Sign in to continue' ref={this.continueModal}>
                         <div className='form'>
                             <b>Please sign in or register a guest account to send a message.</b>
@@ -441,7 +488,7 @@ export default class Client extends Component{
                                     event.target.textContent = 'Joining...';
                                     event.target.disabled = true;
                                     document.querySelector('#csiButton').disabled = true;
-                                    this.client.joinRoom(this.state.room.roomId, {syncRoom: true}).then(() => {
+                                    this.joinRoomConsentSafe(this.state.room.roomId, () => {
                                         this.continueModal.current.close();
                                         this.setState({
                                             readOnly: false
