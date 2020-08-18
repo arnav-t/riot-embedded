@@ -222,8 +222,9 @@ export default class Client extends Component{
                     if (this.signInModal.current) this.signInModal.current.close();
                     if (this.continueModal.current) this.continueModal.current.close();
                     this.consentModal.current.open();
+                    document.querySelector('#consent-given').disabled = true;
                     document.querySelector('#consent-error').style.display = 'none';
-                    document.querySelector('#consent-link').href = e.data.consent_uri;
+                    this.consentHref = e.data.consent_uri;
                     this.consentCallback = callback;
                 } else console.log('Unhandled exception!', e);
             });
@@ -448,30 +449,43 @@ export default class Client extends Component{
 
                     <Modal visible={false} title='Privacy Agreement' ref={this.consentModal}>
                         <div className='form'>
-                            <h3>
-                                Please accept the <a id='consent-link' target='_blank' rel='noopener noreferrer'>privacy agreement</a> to continue.
-                            </h3>
-                            <i className='error-msg' id='consent-error'>You need to accept the agreement to continue.</i>
-                            <button onClick={(event) => {
-                                let button = event.target;
-                                button.textContent = '...';
-                                button.disabled = true;
-                                this.client.joinRoom(this.props.roomId, {syncRoom: true})
-                                    .then(() => {
-                                        button.textContent = 'Continue';
-                                        button.disabled = false;
-                                        this.consentModal.current.close();
-                                        this.setState({
-                                            readOnly: false
+                            <b>
+                                Please open the privacy agreement and accept the terms and conditions to continue.
+                            </b>
+                            <div>
+                                <input type='checkbox' id='consent-chk' disabled onChange={(event) => {
+                                    let checked = event.target.checked;
+                                    document.querySelector('#consent-given').disabled = !checked;
+                                }} /> <i>I have accepted the terms given on the privacy agreement page</i>
+                            </div>
+                            <i className='error-msg' id='consent-error'>You need to accept the terms on the privacy agreement page to continue.</i>
+                            <div className='form-button-panel'>
+                                <button onClick={() => {
+                                    document.querySelector('#consent-chk').disabled = false;
+                                    window.open(this.consentHref);
+                                }}>Privacy Agreement</button>
+                                <button id='consent-given' onClick={(event) => {
+                                    console.log('E');
+                                    let button = event.target;
+                                    button.textContent = '...';
+                                    button.disabled = true;
+                                    this.client.joinRoom(this.props.roomId, {syncRoom: true})
+                                        .then(() => {
+                                            button.textContent = 'Continue';
+                                            button.disabled = false;
+                                            this.consentModal.current.close();
+                                            this.setState({
+                                                readOnly: false
+                                            });
+                                            if (this.consentCallback) this.consentCallback();
+                                        })
+                                        .catch(() => {
+                                            button.textContent = 'Continue';
+                                            button.disabled = false;
+                                            document.querySelector('#consent-error').style.display = 'block';
                                         });
-                                        if (this.consentCallback) this.consentCallback();
-                                    })
-                                    .catch(() => {
-                                        button.textContent = 'Continue';
-                                        button.disabled = false;
-                                        document.querySelector('#consent-error').style.display = 'block';
-                                    });
-                            }}>Continue</button>
+                                }}>Continue</button>
+                            </div>
                         </div>
                     </Modal>
 
