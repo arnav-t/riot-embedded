@@ -92,6 +92,7 @@ export default class Client extends Component{
         this.receiptsModal = createRef();
         this.continueModal = createRef();
         this.consentModal = createRef();
+        this.msgComposer = createRef();
 
         if (!props.accessToken || !props.userId) {
             // If either accessToken or userId is absent
@@ -436,7 +437,7 @@ export default class Client extends Component{
             <ThemeContext.Provider value={{theme: this.state.theme, highlight: this.state.highlight}}>
                 <div className={`client bg-primary-${this.state.theme}`}>
                     <Modal visible={siPrompt} title='Sign in' ref={this.signInModal}>
-                        <SignInForm client={this.client} setUser={this.setUser} />
+                        <SignInForm client={this.client} setUser={this.setUser} msgComposer={this.msgComposer} />
                     </Modal>
                     
                     <Modal visible={false} title='Read by' ref={this.receiptsModal}>
@@ -465,7 +466,6 @@ export default class Client extends Component{
                                     window.open(this.consentHref);
                                 }}>Privacy Agreement</button>
                                 <button id='consent-given' onClick={(event) => {
-                                    console.log('E');
                                     let button = event.target;
                                     button.textContent = '...';
                                     button.disabled = true;
@@ -478,6 +478,7 @@ export default class Client extends Component{
                                                 readOnly: false
                                             });
                                             if (this.consentCallback) this.consentCallback();
+                                            if (this.msgComposer.current) this.msgComposer.current.sendMessage();
                                         })
                                         .catch(() => {
                                             button.textContent = 'Continue';
@@ -507,6 +508,7 @@ export default class Client extends Component{
                                         this.setState({
                                             readOnly: false
                                         });
+                                        if (this.msgComposer.current) this.msgComposer.current.sendMessage();
                                     });
                                 }}>Register as guest</button>
                             </div>
@@ -535,7 +537,7 @@ export default class Client extends Component{
                                 <></>}
                             {this.state.msgComposer ? <MessageComposer client={this.client} 
                                 roomId={currentRoomId} mxEvent={this.state.reply} 
-                                unsetReply={this.replyTo} 
+                                unsetReply={this.replyTo} ref={this.msgComposer}
                                 openContinueModal={this.state.readOnly && this.continueModal.current ? 
                                     this.continueModal.current.open : null} /> : <></>}
                             
