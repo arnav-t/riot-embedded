@@ -47,7 +47,8 @@ export default class Client extends Component{
         super(props);
         this.state = {
             room: null,
-            theme: props.theme === undefined ? 'dark' : props.theme,  // Client theme (dark/light)
+            theme: props.theme === undefined ? 'dark' : 
+                (props.theme === 'auto' ? this.getDeviceTheme() : props.theme),  // Client theme (dark/light)
             highlight: props.highlight === undefined ? 'pink' : props.highlight,   // Client theme highlight (pink/green)
             roomHeader: props.roomHeader !== undefined ? props.roomHeader : true,   // If room header should be displayed
             roomsList: props.roomsList !== undefined ? props.roomsList : 
@@ -59,6 +60,7 @@ export default class Client extends Component{
             currentlyTyping: new Set(), //  People currently typing in the room
             readOnly: props.readOnly // If client is still read only
         };
+        if (props.theme === 'auto') this.deviceTheme = true;
         this.sdk = require('matrix-js-sdk');
 
         // TODO: Load from whitelist from config
@@ -184,6 +186,11 @@ export default class Client extends Component{
                     });
                     this.client.retryImmediately();
                 });
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                    // Watch for changes in device theme
+                    const newTheme = e.matches ? 'dark' : 'light';
+                    if (this.deviceTheme) this.setState({ theme: newTheme });
+                });                
                 this.client.on('RoomMember.typing', (_, member) => {
                     // Add or remove member from currently typing members
                     let roomId = member.roomId;
@@ -231,6 +238,12 @@ export default class Client extends Component{
             });
     }
 
+    /** Get current device theme */
+    getDeviceTheme() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+        return 'light';
+    }
+
     /** Handle clicks from room list */
     onSelectRoom(e) {
         // Unset reply
@@ -275,7 +288,8 @@ export default class Client extends Component{
     /** Consume setTheme event from MessageHandler */
     setTheme(args) {
         this.setState({
-            theme: args.theme ? args.theme : this.state.theme,
+            theme: args.theme ? 
+                (args.theme === 'auto' ? this.getDeviceTheme() : args.theme) : this.state.theme,
             highlight: args.highlight ? args.highlight : this.state.highlight
         });
     }

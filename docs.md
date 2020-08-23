@@ -62,6 +62,7 @@ Leave out `userId` and `accessToken` to attempt registration as guest.
 *  `theme` (*string*) - Theme of the client
     - `'dark'` - Dark theme (default)
     - `'light'` - Light theme
+    - `'auto'` - Use device theme
 *  `highlight` (*string*) - Highlight color  
     - `'pink'` - Pink highlights (default)  
     - `'green'` - Green highlights
@@ -101,7 +102,7 @@ iframe.contentWindow.postMessage({
 *Arguments:*
 
 `args` (object):   
-* `theme` (string) - `'dark'` or `'light'`
+* `theme` (string) - `'dark'`, `'light'` or `'auto'`
 * `highlight` (string) - highlight color such as `'pink'` or `'green'`   
 
 *Response:*
