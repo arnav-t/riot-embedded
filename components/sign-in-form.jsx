@@ -81,7 +81,7 @@ export default class SignInForm extends PureComponent {
                     <input type='password' name='passwd' />
                 </div>
                 <div className='form-element'>
-                    <input type='submit' id='sign-in-submit' value='Sign in' />
+                    <input className='form-button' type='submit' id='sign-in-submit' value='Sign in' />
                 </div>
             </form>
         );

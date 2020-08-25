@@ -468,18 +468,18 @@ export default class Client extends Component{
                                 Please open the privacy agreement and accept the terms and conditions to continue.
                             </b>
                             <div>
-                                <input type='checkbox' id='consent-chk' disabled onChange={(event) => {
+                                <input className='form-checkbox' type='checkbox' id='consent-chk' disabled onChange={(event) => {
                                     let checked = event.target.checked;
                                     document.querySelector('#consent-given').disabled = !checked;
                                 }} /> <i>I have accepted the terms given on the privacy agreement page</i>
                             </div>
                             <i className='error-msg' id='consent-error'>You need to accept the terms on the privacy agreement page to continue.</i>
                             <div className='form-button-panel'>
-                                <button onClick={() => {
+                                <button className='form-button' onClick={() => {
                                     document.querySelector('#consent-chk').disabled = false;
                                     window.open(this.consentHref);
                                 }}>Privacy Agreement</button>
-                                <button id='consent-given' onClick={(event) => {
+                                <button className='form-button' id='consent-given' onClick={(event) => {
                                     let button = event.target;
                                     button.textContent = '...';
                                     button.disabled = true;
@@ -508,12 +508,12 @@ export default class Client extends Component{
                         <div className='form'>
                             <b>Please sign in or register a guest account to send a message.</b>
                             <div className='form-button-panel'>
-                                <button id='csiButton' onClick={() => {
+                                <button className='form-button' id='csiButton' onClick={() => {
                                     // Open the sign in modal
                                     this.continueModal.current.close();
                                     this.signInModal.current.open();
                                 }}>Sign in</button>
-                                <button onClick={(event) => {
+                                <button className='form-button' onClick={(event) => {
                                     event.target.textContent = 'Joining...';
                                     event.target.disabled = true;
                                     document.querySelector('#csiButton').disabled = true;

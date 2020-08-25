@@ -68,7 +68,8 @@ body {
 .rooms-panel {
     padding-top: 15px;
     height: inherit;
-    width: max-content;
+    width: fit-content;
+    max-width: 20vw;
     white-space: nowrap;
     z-index: 97;
 }
@@ -106,6 +107,8 @@ body {
 
 .list-panel-item {
     padding: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .typing-panel {
@@ -221,19 +224,41 @@ body {
     width: 50%;
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     margin-top: 5px;
 }
 
 .form-button {
-    background-color: silver; /* Green */
+    margin-left: 4px;
+    margin-right: 4px;
+    background-color: #444;
     border: none;
-    color: white;
-    padding: 15px 32px;
+    color: #fff;
+    padding: 5px 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
+}
+
+.form-button:hover {
+    background-color: #666;
+    cursor: pointer;
+}
+
+.form-checkbox {
+    border-radius: 0;
+    cursor: pointer;
+}
+
+.form-checkbox:disabled {
+    cursor: not-allowed;
+}
+
+.form-button:disabled {
+    background-color: #666;
+    color: #888;
+    cursor: not-allowed;
 }
 
 .error-msg {
