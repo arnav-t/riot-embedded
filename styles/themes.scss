@@ -1,6 +1,39 @@
 @import './layout.scss';
 
 /* Highlights */
+// Custom
+.send-button-custom {
+    @extend .send-button;
+    background-color: $color-highlight-custom;
+    color: $color-txt-light;
+}
+
+.highlight-custom {
+    z-index: 98;
+    color: $color-txt-custom;
+    background-color: $color-highlight-custom;
+    box-shadow: 0 0 5px $color-light-shadow;
+}
+
+.hoverable-custom:hover {
+    @extend .hoverable;
+    color: $color-txt-custom;
+    background-color: $color-highlight-custom;
+}
+
+.timeline-img-custom {
+    @extend .timeline-img;
+    border-color: $color-highlight-custom;
+}
+
+.cross-custom {
+    @extend .cross;
+}
+
+.cross-custom:before, .cross-custom:after {
+    background-color: $color-txt-custom;
+}
+
 // Pink
 .send-button-pink {
     @extend .send-button;

@@ -1,4 +1,5 @@
 /* Highlight colors */
+$color-highlight-custom: rgb(65, 82, 235); // Custom highlight color
 $color-highlight-pink: rgb(221, 15, 135); // Highlight color
 $color-highlight-green: rgb(30, 235, 108); // Highlight color
 
@@ -26,6 +27,7 @@ $color-scrollbar-hover-light: #555;
 
 
 /* Text colors */
+$color-txt-custom: white; // Text color on custom highlight
 $color-txt-light: white; // Light text color
 $color-txt-dark: black; // Dark text color
 $color-txt-muted: gray; // Muted text text
