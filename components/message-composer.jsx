@@ -85,11 +85,7 @@ export default class MessageComposer extends PureComponent {
             this.props.openContinueModal();
             return;
         }
-        
-        this.setState({
-            value: '',
-            busy: true
-        });
+        this.setState({ busy: true });
 
         const htmlBody = new Markdown(this.state.value).toHtml();
 
@@ -103,6 +99,7 @@ export default class MessageComposer extends PureComponent {
                 this._constructReply(htmlBody), null, this._msgCallback);
             this.props.unsetReply();
         }
+        this.setState({ value: '' });
     }
 
     /** Callback for updating text */

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
  * 
  * @param   {object} client - Client object
  * @param   {func} setUser - Callback to change user
+ * @param   {object} msgComposer - Ref to message composer
  */
 export default class SignInForm extends PureComponent {
     constructor(props) {
@@ -20,7 +21,8 @@ export default class SignInForm extends PureComponent {
 
     static propTypes = {
         client: PropTypes.object.isRequired, // Client object
-        setUser: PropTypes.func.isRequired // Callback to change user
+        setUser: PropTypes.func.isRequired, // Callback to change user
+        msgComposer: PropTypes.object.isRequired // Ref to message composer
     }
 
     onSubmit(event) {
@@ -48,6 +50,9 @@ export default class SignInForm extends PureComponent {
                     this.setState({
                         state: 'success'
                     });
+                    if (this.props.msgComposer.current) {
+                        this.props.msgComposer.current.sendMessage();
+                    }
                 });
             }
         });
@@ -76,7 +81,7 @@ export default class SignInForm extends PureComponent {
                     <input type='password' name='passwd' />
                 </div>
                 <div className='form-element'>
-                    <input type='submit' id='sign-in-submit' value='Sign in' />
+                    <input className='form-button' type='submit' id='sign-in-submit' value='Sign in' />
                 </div>
             </form>
         );

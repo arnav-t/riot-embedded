@@ -47,7 +47,8 @@ export default class Client extends Component{
         super(props);
         this.state = {
             room: null,
-            theme: props.theme === undefined ? 'dark' : props.theme,  // Client theme (dark/light)
+            theme: props.theme === undefined ? 'dark' : 
+                (props.theme === 'auto' ? this.getDeviceTheme() : props.theme),  // Client theme (dark/light)
             highlight: props.highlight === undefined ? 'pink' : props.highlight,   // Client theme highlight (pink/green)
             roomHeader: props.roomHeader !== undefined ? props.roomHeader : true,   // If room header should be displayed
             roomsList: props.roomsList !== undefined ? props.roomsList : 
@@ -59,6 +60,7 @@ export default class Client extends Component{
             currentlyTyping: new Set(), //  People currently typing in the room
             readOnly: props.readOnly // If client is still read only
         };
+        if (props.theme === 'auto') this.deviceTheme = true;
         this.sdk = require('matrix-js-sdk');
 
         // TODO: Load from whitelist from config
@@ -92,6 +94,7 @@ export default class Client extends Component{
         this.receiptsModal = createRef();
         this.continueModal = createRef();
         this.consentModal = createRef();
+        this.msgComposer = createRef();
 
         if (!props.accessToken || !props.userId) {
             // If either accessToken or userId is absent
@@ -183,6 +186,11 @@ export default class Client extends Component{
                     });
                     this.client.retryImmediately();
                 });
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                    // Watch for changes in device theme
+                    const newTheme = e.matches ? 'dark' : 'light';
+                    if (this.deviceTheme) this.setState({ theme: newTheme });
+                });                
                 this.client.on('RoomMember.typing', (_, member) => {
                     // Add or remove member from currently typing members
                     let roomId = member.roomId;
@@ -230,6 +238,12 @@ export default class Client extends Component{
             });
     }
 
+    /** Get current device theme */
+    getDeviceTheme() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+        return 'light';
+    }
+
     /** Handle clicks from room list */
     onSelectRoom(e) {
         // Unset reply
@@ -274,7 +288,8 @@ export default class Client extends Component{
     /** Consume setTheme event from MessageHandler */
     setTheme(args) {
         this.setState({
-            theme: args.theme ? args.theme : this.state.theme,
+            theme: args.theme ? 
+                (args.theme === 'auto' ? this.getDeviceTheme() : args.theme) : this.state.theme,
             highlight: args.highlight ? args.highlight : this.state.highlight
         });
     }
@@ -436,7 +451,7 @@ export default class Client extends Component{
             <ThemeContext.Provider value={{theme: this.state.theme, highlight: this.state.highlight}}>
                 <div className={`client bg-primary-${this.state.theme}`}>
                     <Modal visible={siPrompt} title='Sign in' ref={this.signInModal}>
-                        <SignInForm client={this.client} setUser={this.setUser} />
+                        <SignInForm client={this.client} setUser={this.setUser} msgComposer={this.msgComposer} />
                     </Modal>
                     
                     <Modal visible={false} title='Read by' ref={this.receiptsModal}>
@@ -453,19 +468,18 @@ export default class Client extends Component{
                                 Please open the privacy agreement and accept the terms and conditions to continue.
                             </b>
                             <div>
-                                <input type='checkbox' id='consent-chk' disabled onChange={(event) => {
+                                <input className='form-checkbox' type='checkbox' id='consent-chk' disabled onChange={(event) => {
                                     let checked = event.target.checked;
                                     document.querySelector('#consent-given').disabled = !checked;
                                 }} /> <i>I have accepted the terms given on the privacy agreement page</i>
                             </div>
                             <i className='error-msg' id='consent-error'>You need to accept the terms on the privacy agreement page to continue.</i>
                             <div className='form-button-panel'>
-                                <button onClick={() => {
+                                <button className='form-button' onClick={() => {
                                     document.querySelector('#consent-chk').disabled = false;
                                     window.open(this.consentHref);
                                 }}>Privacy Agreement</button>
-                                <button id='consent-given' onClick={(event) => {
-                                    console.log('E');
+                                <button className='form-button' id='consent-given' onClick={(event) => {
                                     let button = event.target;
                                     button.textContent = '...';
                                     button.disabled = true;
@@ -478,6 +492,7 @@ export default class Client extends Component{
                                                 readOnly: false
                                             });
                                             if (this.consentCallback) this.consentCallback();
+                                            if (this.msgComposer.current) this.msgComposer.current.sendMessage();
                                         })
                                         .catch(() => {
                                             button.textContent = 'Continue';
@@ -493,12 +508,12 @@ export default class Client extends Component{
                         <div className='form'>
                             <b>Please sign in or register a guest account to send a message.</b>
                             <div className='form-button-panel'>
-                                <button id='csiButton' onClick={() => {
+                                <button className='form-button' id='csiButton' onClick={() => {
                                     // Open the sign in modal
                                     this.continueModal.current.close();
                                     this.signInModal.current.open();
                                 }}>Sign in</button>
-                                <button onClick={(event) => {
+                                <button className='form-button' onClick={(event) => {
                                     event.target.textContent = 'Joining...';
                                     event.target.disabled = true;
                                     document.querySelector('#csiButton').disabled = true;
@@ -507,6 +522,7 @@ export default class Client extends Component{
                                         this.setState({
                                             readOnly: false
                                         });
+                                        if (this.msgComposer.current) this.msgComposer.current.sendMessage();
                                     });
                                 }}>Register as guest</button>
                             </div>
@@ -535,7 +551,7 @@ export default class Client extends Component{
                                 <></>}
                             {this.state.msgComposer ? <MessageComposer client={this.client} 
                                 roomId={currentRoomId} mxEvent={this.state.reply} 
-                                unsetReply={this.replyTo} 
+                                unsetReply={this.replyTo} ref={this.msgComposer}
                                 openContinueModal={this.state.readOnly && this.continueModal.current ? 
                                     this.continueModal.current.open : null} /> : <></>}
                             

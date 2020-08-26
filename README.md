@@ -33,6 +33,7 @@ export let config = {
 };
 ```
 Leave out `userId` and `accessToken` to attempt registration as guest.   
+To set custom highlight colors, change the Sass variables `$color-highlight-custom` and `$color-txt-custom` in `styles/colors.scss` and set `highlight` to `'custom'` in the configuration. 
 #### Complete list of options:
 *  `baseUrl` (*string*) - Base URL of homeserver - **Required**
 *  `roomId` (*string*) - The internal ID of default room - **Required** 
@@ -47,9 +48,11 @@ Leave out `userId` and `accessToken` to attempt registration as guest.
 *  `theme` (*string*) - Theme of the client
     - `'dark'` - Dark theme (default)
     - `'light'` - Light theme
+    - `'auto'` - Use device theme
 *  `highlight` (*string*) - Highlight color  
     - `'pink'` - Pink highlights (default)  
     - `'green'` - Green highlights
+    - `'custom'` - Custom highlight color
 *  `roomHeader` (*boolean*) - If room header should be displayed        
     - `true` (default)
     - `false`          

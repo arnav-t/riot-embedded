@@ -47,7 +47,8 @@ export let config = {
     accessToken: '<DEFAULT ACCESS TOKEN>'
 };
 ```
-Leave out `userId` and `accessToken` to attempt registration as guest.
+Leave out `userId` and `accessToken` to attempt registration as guest.   
+To set custom highlight colors, change the Sass variables `$color-highlight-custom` and `$color-txt-custom` in `styles/colors.scss` and set `highlight` to `'custom'` in the configuration.
 #### Complete list of options:
 *  `baseUrl` (*string*) - Base URL of homeserver - **Required**
 *  `roomId` (*string*) - The internal ID of default room - **Required** 
@@ -62,9 +63,11 @@ Leave out `userId` and `accessToken` to attempt registration as guest.
 *  `theme` (*string*) - Theme of the client
     - `'dark'` - Dark theme (default)
     - `'light'` - Light theme
+    - `'auto'` - Use device theme
 *  `highlight` (*string*) - Highlight color  
     - `'pink'` - Pink highlights (default)  
     - `'green'` - Green highlights
+    - `'custom'` - Custom highlight color
 *  `roomHeader` (*boolean*) - If room header should be displayed        
     - `true` (default)
     - `false`          
@@ -101,8 +104,8 @@ iframe.contentWindow.postMessage({
 *Arguments:*
 
 `args` (object):   
-* `theme` (string) - `'dark'` or `'light'`
-* `highlight` (string) - highlight color such as `'pink'` or `'green'`   
+* `theme` (string) - `'dark'`, `'light'` or `'auto'`
+* `highlight` (string) - highlight color such as `'pink'`,  `'green'`  or `'custom'` 
 
 *Response:*
 ```js
@@ -168,7 +171,7 @@ iframe.contentWindow.postMessage({
     message: 'Toggled message composer.'
 }
 ```
-### Switch room
+#### Switch room
 ```js
 iframe.contentWindow.postMessage({
     cmd: 'switchRoom',
@@ -187,7 +190,7 @@ Internal room ID
     message: 'Attempting to switch room...'
 }
 ```
-### Login with username and password
+#### Login with username and password
 ```js
 iframe.contentWindow.postMessage({
     cmd: 'login',

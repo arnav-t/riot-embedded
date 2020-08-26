@@ -37,7 +37,7 @@ export default class RoomsList extends PureComponent {
         }
         
         return (
-            <div className={`bg-secondary-${theme.theme} rooms-panel`}>
+            <div className={`bg-secondary-${theme.theme} rooms-panel scrollable-${theme.theme}`}>
                 <ul className='list-panel'>
                     {rooms}
                 </ul>
