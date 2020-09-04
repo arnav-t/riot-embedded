@@ -275,7 +275,9 @@ export default class Client extends Component{
             readOnly: false
         });
         
-        this.init(callback);
+        this.client.joinRoom(this.state.room.roomId, {syncRoom: true}).then(() => {
+            this.init(callback);
+        });
     }
 
     /** Set the reply */
