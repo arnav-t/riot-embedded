@@ -31,6 +31,15 @@ export default class SignInForm extends PureComponent {
         let user = formData.get('uname');
         let passwd = formData.get('passwd');
         let submit = document.getElementById('sign-in-submit');
+
+        // Reject invalid username format
+        if (!user.startsWith('@')) {
+            this.setState( {state:'err'} );
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+
         submit.value = '...';
         submit.disabled = true;
         this.props.client.loginWithPassword(user, passwd, (err, data) => {
@@ -73,7 +82,7 @@ export default class SignInForm extends PureComponent {
                 { (this.state.state == 'err') && 
                 <i className='error-msg'>Invalid username or password.</i> }
                 <div className='form-element'>
-                    <h4 className='form-label'>Username: </h4>
+                    <h4 className='form-label'>Username: <i className='text-muted'>@user:site.com</i></h4>
                     <input type='text' name='uname' />
                 </div>
                 <div className='form-element'>
