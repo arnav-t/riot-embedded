@@ -1,5 +1,5 @@
 # riot-embedded
-Embedded version of Riot. Currently work in progress. 
+Embedded version of Riot (now known as [Element](https://element.io/)). Currently work in progress. 
 ## Development workflow   
 ### Installing dependencies
 ```
