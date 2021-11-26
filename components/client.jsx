@@ -40,7 +40,9 @@ export default class Client extends Component{
         roomsList: PropTypes.bool, // Enable roomsList? Overrides readOnly
         msgComposer: PropTypes.bool, // Enable msgComposer? Overrides readOnly
         whitelist: PropTypes.array, // Whitelisted origins - ignore to allow all
-        signInPrompt: PropTypes.string // Show signInPrompt for - none, guests, all
+        signInPrompt: PropTypes.string, // Show signInPrompt for - none, guests, all
+        displayName: PropTypes.string, // Display name for user (used for guests)
+        composerIntialValue: PropTypes.string // Initial value of composer
     };
 
     constructor(props) {
@@ -119,6 +121,7 @@ export default class Client extends Component{
                     userId: userId
                 });
                 this.client.setGuest(true);
+                if (this.props.displayName) this.client.setDisplayName(this.props.displayName);
                 if (props.readOnly) {
                     this.client.peekInRoom(this.props.roomId, {syncRoom: true}).then(() => {
                         this.init();
@@ -537,7 +540,7 @@ export default class Client extends Component{
                     </div>}       
                     
                     <div className={`client-body bg-primary-${this.state.theme}`}>
-                        {this.state.roomsList && (<RoomsList list={this.client.getRooms()} 
+                        {this.state.roomsList > 1 && (<RoomsList list={this.client.getRooms()} 
                             currentRoomId={currentRoomId}
                             onClick={this.onSelectRoom} />)}
                         <TimelinePanel homeserver={homeserver} room={this.state.room} 
@@ -550,6 +553,7 @@ export default class Client extends Component{
                                     replyTo={this.replyTo} /> : 
                                 <></>}
                             {this.state.msgComposer ? <MessageComposer client={this.client} 
+                                intialValue={this.props.composerIntialValue}
                                 roomId={currentRoomId} mxEvent={this.state.reply} 
                                 unsetReply={this.replyTo} ref={this.msgComposer}
                                 openContinueModal={this.state.readOnly && this.continueModal.current ? 

@@ -19,13 +19,14 @@ export default class MessageComposer extends PureComponent {
         client: PropTypes.object.isRequired, // Client object
         mxEvent: PropTypes.object, // Event to reply to
         unsetReply: PropTypes.func.isRequired, // Callback to unset reply
-        openContinueModal: PropTypes.func // Callback to open continue dialog box
+        openContinueModal: PropTypes.func, // Callback to open continue dialog box
+        intialValue: PropTypes.string // Initial value of composer
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
+            value: props.intialValue || '',
             busy: false
         };
 

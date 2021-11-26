@@ -68,3 +68,12 @@ To set custom highlight colors, change the Sass variables `$color-highlight-cust
     - `'none'` - Never show (default)
     - `'guests'` - Show if signed in as guest
     - `'all'` - Always show
+*  `displayName` (*string*) - Display name of user, useful when using guest accounts
+*  `composerIntialValue` (*string*) - Initial value of the composer for prepoulating a sample message
+*  `signInPrompt` (*string*) - Show sign in prompts    
+    - `'none'` - Never show (default)
+    - `'guests'` - Show if signed in as guest
+    - `'all'` - Always show
+*  `urlParameters` (*boolean*) - Allow adding to config with url prameters (`#displayName=Something`)    
+    - `'true'` (default)
+    - `'false'`
